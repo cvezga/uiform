@@ -6,6 +6,10 @@ import com.cvezga.uiform.BO;
 import com.cvezga.uiform.JsonUtil;
 
 public class OrdenServicioBO implements BO {
+	
+	private OrdenDeServicioDAO dao = new OrdenDeServicioDAO();
+	
+	
 
 	@Override
 	public String process(Map<String, String> data) {
@@ -18,5 +22,9 @@ public class OrdenServicioBO implements BO {
 		
 		return null;
 	}
-
+	
+	
+	public Map<Long,String> getFabricantes(){
+		return dao.getFabricantes();
+	}
 }

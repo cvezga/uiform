@@ -2,7 +2,9 @@ package com.vvs.ordenservicio;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -60,6 +62,30 @@ public class MapDAO {
 		
 	
 		return sql;
+	}
+
+	public Map<Long, String> getMap(String string, String key, String value) {
+		Map<Long,String> map = new HashMap<Long,String>();
+		String sql = "SELECT %KEY%,%VALUE% FROM TABLA ORDER BY %ORDER%"
+				.replace("%KEY%", key).replace("%VALUE%", value).replace("%ORDER%",  value);
+		
+		ConnectionHelper ch = DB.getConnectionHelper();
+		try {
+			ResultSet rs = ch.executeQuery(sql);
+			while(rs.next()){
+				Long keyValue = rs.getLong(key);
+				String valueValue = rs.getString(value);
+				map.put(keyValue, valueValue);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			ch.closeAll();
+		}
+		
+		 
+		return map;
 	}
 
 }

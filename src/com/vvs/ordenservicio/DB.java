@@ -7,13 +7,18 @@ import java.sql.SQLException;
 public class DB {
 	
 
-
+	private static String host = "190.7.214.194";
+	private static String port = "14432";
+	private static String user = "postgres";
+	private static String pass = "pos_GREEN_BOX_2016";
+	private static String sche = "telefonica_clinte";
+	
 	public static Connection getConnetion(){
 		Connection connection = null;
 		try {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(
-					   "jdbc:postgresql://190.7.214194:14432/telefonica_clinte","postgres", "pos_GREEN_BOX_2016");
+					   "jdbc:postgresql://"+host+":"+port+"/"+sche, user, pass);
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -26,5 +31,10 @@ public class DB {
 		 
 		
 		return connection;
+	}
+	
+	public static ConnectionHelper getConnectionHelper(){
+		ConnectionHelper ch = new ConnectionHelper(getConnetion());
+		return ch;
 	}
 }
