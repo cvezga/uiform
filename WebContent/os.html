@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Orden de Servicio</title>
+<script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
+
+<script type="text/javascript">
+       
+	$(document).ready(function(e) {
+		table = $("#table-form");
+		fields =  $("#field-list");
+		
+
+
+		$.each( $('#field-list'), function(i, list) {
+		   $('div', list).each(function(k,v) {
+			   label =  v.attributes["label"]; //.attr('label'); //"llllll";// index.attr("label");
+               table.append("<tr><td>"+label.value+"</td><td><input></td></tr>");
+		   });
+		})
+
+
+		
+	});
+	
+	function updateFormEntries(){
+		for(i=1; i<23; i++){
+			row = document.getElementById('field-'+i);//$("#field1");
+			label = row.getAttribute('label');
+			required = row.getAttribute('required');
+			if(required!=null){
+				req="*";
+			}else{
+				req="";
+			}
+			
+			//row.innerHTML = "<tr><td>"+label+"</td><td><input></td></tr>";
+			
+			table = document.getElementById('table-form');
+			
+			table.innerHTML = table.innerHTML + "<tr><td>"+label+req+":</td><td><input></td></tr>";
+		}
+	}
+	
+</script>
+</head>
+<body>
+      <h1>REGISTRO DE ORDEN DE SERVICIO</h1>
+      <div id="msgid" ></div>
+      <table id="table-form" border="1" cellpadding="5" cellspacing="0">
+      </table>
+      <div id="field-list">
+          <div id="telefono" label="TELÉFONO" required="true" max-length="8" type="number" />
+	      <div id="fabricante" label="FABRICANTE"  required="true" type="combo" model="fabricantes" />
+	      <div id="medole" label="MODELO"  required="true" type="combo" model="modelos(field-2)"/>
+	      <div id="seria" label="# SERIE (IMEI)"  required="true" min-length="15" max-length="15" type="number"/> 
+	      <div id="nombre" label="NOMBRE / APELLIDO"  required="true" max-length="150" size="50"/> 
+	      <div id="email" label="EMAIL" max-length="50" type="email" />  
+	      <div id="telefono-persona" label="TELÉFONO PERSONAL"  required="true"  max-length="8" type="number" />
+	      <div id="direccion" label="DIRECCIÓN"  required="true"/> 
+	      <div id="cliente-tiene-factura" label="CLIENTE TIENE FACTURA"  required="true"  max-length="300" type="textarea" rows="4" cols="50" /> 
+	      <div id="falla-1" label="FALLA 1"  required="true" type="combo" model="falles" /> 
+	      <div id="falla-2" label="FALLA 2"  type="combo" model="falles" />  
+	      <div id="falla-3" label="FALLA 3"  type="combo" model="falles" />  
+	      <div id="falla-4" label="FALLA 4"  type="combo" model="falles" />  
+	      <div id="cimentario" label="COMENTARIO"  required="true" max-length="300" type="textarea" rows="4" cols="50" /> 
+	      <div id="garantia" label="GARANTÍA"  required="true" type="combo" model="garantias" /> 
+	      <div id="fabricante-telefono-prestado" label="FABRICANTE TELÉFONO PRESTADO"  type="combo" model="marcas" /> 
+	      <div id="modelo-telefono-prestado" label="MODELO TELÉFONO PRESTADO"  type="combo" model="modelos(field-16)" />  
+	      <div id="serie-telefono-prestado" label="# SERIE (IMEI) TELÉFONO PRESTADO"  type="number" min-length="15" max-length="15"/>
+	      <div id="factura-o-nota-de-venta" label="FACTURA / NOTA DE VENTA" max-length="8"/> 
+	      <div id="fecha-factura" label="FECHA DE FACTURA" max-length="10" type="date"/> 
+	      <div id="imagen-registro-danos" label="REGISTRO DE DAÑOS"  type="paint" width="100em" height="50em"  />
+      </div>
+      
+      
+      <script>
+      //updateFormEntries();
+      </script>
+      
+   </body>
+</html>
