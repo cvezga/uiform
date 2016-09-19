@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>OrdenServicioView</display-name>
+	<servlet>
+		<description>
+		</description>
+		<display-name>MicroServiceServlet</display-name>
+		<servlet-name>MicroServiceServlet</servlet-name>
+		<servlet-class>com.cvezga.uiform.MicroServiceServlet</servlet-class>
+		<init-param>
+		  <description></description>
+		  <param-name>os.ms</param-name>
+		  <param-value>com.vvs.ordenservicio.OrdenServicioBO</param-value>
+		</init-param>
+		<init-param>
+		  <description></description>
+		  <param-name>json_test.ms</param-name>
+		  <param-value>com.vvs.ordenservicio.OrdenServicioBO</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MicroServiceServlet</servlet-name>
+		<url-pattern>*.ms</url-pattern>
+	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>

@@ -15,11 +15,24 @@
 
 		$.each( $('#field-list'), function(i, list) {
 		   $('div', list).each(function(k,v) {
+			   id = v.attributes["id"];
 			   label =  v.attributes["label"]; //.attr('label'); //"llllll";// index.attr("label");
-               table.append("<tr><td>"+label.value+"</td><td><input></td></tr>");
+               table.append("<tr><td>"+label.value+"</td><td><input id=\""+id.value+"-input\" ></td></tr>");
 		   });
 		})
 
+		  $("button").click(function(){
+		    	var jsonform = getForm();
+		        $.post("json_test.ms",
+		        {
+		          name: "Donald Duck",
+		          city: "Duckburg",
+		          json: JSON.stringify(jsonform)
+		        },
+		        function(data,status){
+		            alert("Data: " + data + "\nStatus: " + status);
+		        });
+		    });
 
 		
 	});
@@ -27,6 +40,7 @@
 	function updateFormEntries(){
 		for(i=1; i<23; i++){
 			row = document.getElementById('field-'+i);//$("#field1");
+			id = row.getAttribute('id');
 			label = row.getAttribute('label');
 			required = row.getAttribute('required');
 			if(required!=null){
@@ -39,8 +53,43 @@
 			
 			table = document.getElementById('table-form');
 			
-			table.innerHTML = table.innerHTML + "<tr><td>"+label+req+":</td><td><input></td></tr>";
+			table.innerHTML = table.innerHTML + "<tr><td>"+label+req+":</td><td><input id=\""+id+"-input\" ></td></tr>";
 		}
+	}
+	
+	function getForm(){
+		form = {
+				telefono: valueOf('telefono'),
+				fabricante: valueOf('fabricante'),
+				medole: valueOf('medole'),
+				seria: valueOf('seria'), 
+				nombre: valueOf('nombre'), 
+				email: valueOf('email'),  
+				telefonoPersona: valueOf('telefonoPersona'),
+				direccion: valueOf('direccion'), 
+				clienteTieneFactura: valueOf('clienteTieneFactura'), 
+				falla1: valueOf('falla1'), 
+				falla2: valueOf('falla2'),  
+				falla3: valueOf('falla3'),  
+				falla4: valueOf('falla4'),  
+				comentario: valueOf('comentario'), 
+				garantia: valueOf('garantia'), 
+				fabricanteTelefonoPrestado: valueOf('fabricanteTelefonoPrestado'), 
+				modeloTelefonoPrestado: valueOf('modeloTelefonoPrestado'),  
+				serieTelefonoPrestado: valueOf('serieTelefonoPrestado'),
+				facturaONotaDeVenta: valueOf('facturaONotaDeVenta'), 
+				fechaFactura: valueOf('fechaFactura'), 
+				imagenRegistroDanos: valueOf('imagenRegistroDanos')	
+				
+		};
+		
+		return form;
+	}
+	
+	function valueOf(fieldName){
+		value =   $('#'+fieldName+'-input').prop('value');
+		
+		return value;
 	}
 	
 </script>
@@ -57,23 +106,24 @@
 	      <div id="seria" label="# SERIE (IMEI)"  required="true" min-length="15" max-length="15" type="number"/> 
 	      <div id="nombre" label="NOMBRE / APELLIDO"  required="true" max-length="150" size="50"/> 
 	      <div id="email" label="EMAIL" max-length="50" type="email" />  
-	      <div id="telefono-persona" label="TELÉFONO PERSONAL"  required="true"  max-length="8" type="number" />
+	      <div id="telefonoPersona" label="TELÉFONO PERSONAL"  required="true"  max-length="8" type="number" />
 	      <div id="direccion" label="DIRECCIÓN"  required="true"/> 
-	      <div id="cliente-tiene-factura" label="CLIENTE TIENE FACTURA"  required="true"  max-length="300" type="textarea" rows="4" cols="50" /> 
-	      <div id="falla-1" label="FALLA 1"  required="true" type="combo" model="falles" /> 
-	      <div id="falla-2" label="FALLA 2"  type="combo" model="falles" />  
-	      <div id="falla-3" label="FALLA 3"  type="combo" model="falles" />  
-	      <div id="falla-4" label="FALLA 4"  type="combo" model="falles" />  
-	      <div id="cimentario" label="COMENTARIO"  required="true" max-length="300" type="textarea" rows="4" cols="50" /> 
+	      <div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"  required="true"  max-length="300" type="textarea" rows="4" cols="50" /> 
+	      <div id="falla1" label="FALLA 1"  required="true" type="combo" model="falles" /> 
+	      <div id="falla2" label="FALLA 2"  type="combo" model="falles" />  
+	      <div id="falla3" label="FALLA 3"  type="combo" model="falles" />  
+	      <div id="falla4" label="FALLA 4"  type="combo" model="falles" />  
+	      <div id="c0mentario" label="COMENTARIO"  required="true" max-length="300" type="textarea" rows="4" cols="50" /> 
 	      <div id="garantia" label="GARANTÍA"  required="true" type="combo" model="garantias" /> 
-	      <div id="fabricante-telefono-prestado" label="FABRICANTE TELÉFONO PRESTADO"  type="combo" model="marcas" /> 
-	      <div id="modelo-telefono-prestado" label="MODELO TELÉFONO PRESTADO"  type="combo" model="modelos(field-16)" />  
-	      <div id="serie-telefono-prestado" label="# SERIE (IMEI) TELÉFONO PRESTADO"  type="number" min-length="15" max-length="15"/>
-	      <div id="factura-o-nota-de-venta" label="FACTURA / NOTA DE VENTA" max-length="8"/> 
-	      <div id="fecha-factura" label="FECHA DE FACTURA" max-length="10" type="date"/> 
-	      <div id="imagen-registro-danos" label="REGISTRO DE DAÑOS"  type="paint" width="100em" height="50em"  />
+	      <div id="fabricanteTelefonoPrestado" label="FABRICANTE TELÉFONO PRESTADO"  type="combo" model="marcas" /> 
+	      <div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"  type="combo" model="modelos(field-16)" />  
+	      <div id="serieTelefonoPrestado" label="# SERIE (IMEI) TELÉFONO PRESTADO"  type="number" min-length="15" max-length="15"/>
+	      <div id="facturaONotaDeVenta" label="FACTURA / NOTA DE VENTA" max-length="8"/> 
+	      <div id="fechaFactura" label="FECHA DE FACTURA" max-length="10" type="date"/> 
+	      <div id="imagenRegistroDanos" label="REGISTRO DE DAÑOS"  type="paint" width="100em" height="50em"  />
       </div>
       
+      <button>Send an HTTP POST request to a page and get the result back</button>
       
       <script>
       //updateFormEntries();
