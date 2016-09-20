@@ -6,7 +6,7 @@ public class OrdenServicio {
 	
 	private int telefono;
     private int fabricante;
-    private int medole;
+    private int modelo;
     private long serie; 
     private String nombre; 
     private String email;  
@@ -38,12 +38,7 @@ public class OrdenServicio {
 	public void setFabricante(int fabricante) {
 		this.fabricante = fabricante;
 	}
-	public int getMedole() {
-		return medole;
-	}
-	public void setMedole(int medole) {
-		this.medole = medole;
-	}
+	
 	public long getSerie() {
 		return serie;
 	}
@@ -151,6 +146,12 @@ public class OrdenServicio {
 	}
 	public void setImagenRegistroDanos(String imagenRegistroDanos) {
 		this.imagenRegistroDanos = imagenRegistroDanos;
+	}
+	public int getModelo() {
+		return modelo;
+	}
+	public void setModelo(int modelo) {
+		this.modelo = modelo;
 	}
     
     

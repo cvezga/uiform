@@ -6,49 +6,55 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnectionHelper {
-	
+
 	private Connection con;
 	private PreparedStatement ps;
-    private ResultSet rs;
+	private ResultSet rs;
 
-    public ConnectionHelper(Connection con) {
+	public ConnectionHelper(Connection con) {
 		this.con = con;
 	}
 
-	public void closeAll(){
-    	closeResultSet();
-    	closePreparedStatement();
-    	closeConection();
-    }
+	public void closeAll() {
+		closeResultSet();
+		closePreparedStatement();
+		closeConection();
+	}
 
 	private void closeResultSet() {
 		try {
-			this.rs.close();
+			if (rs != null) {
+				this.rs.close();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void closePreparedStatement() {
 		try {
-			this.ps.close();
+			if (ps != null) {
+				this.ps.close();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void closeConection() {
 		try {
-			this.con.close();
+			if (con != null) {
+				this.con.close();
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	public Connection getCon() {
@@ -76,7 +82,7 @@ public class ConnectionHelper {
 	}
 
 	public PreparedStatement prepareStatement(String sql) {
-		
+
 		try {
 			this.ps = this.con.prepareStatement(sql);
 			return this.ps;
@@ -101,6 +107,26 @@ public class ConnectionHelper {
 	public ResultSet executeQuery(String sql) {
 		try {
 			this.ps = this.con.prepareStatement(sql);
+			this.rs = this.ps.executeQuery();
+			return rs;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public void beginTansaction() throws SQLException {
+		this.con.setAutoCommit(false);
+
+	}
+
+	public void endTransaction() throws SQLException {
+		this.con.commit();
+
+	}
+
+	public ResultSet executeQuery(PreparedStatement ps) {
+		try {
 			this.rs = this.ps.executeQuery();
 			return rs;
 		} catch (SQLException e) {

@@ -3,7 +3,7 @@ package com.vvs.ordenservicio;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrdenDeServicioDAO {
+public class OrdenServicioDAO {
 
 	private static MapDAO mapDao = new MapDAO();
 
@@ -13,14 +13,14 @@ public class OrdenDeServicioDAO {
 
 		bindMap.put("sssss", dataMap.get("aaaaa"));
 
-		String outcume = mapDao.insert("log_ordenservicio", bindMap);
+		String outcome = mapDao.insert("log_ordenservicio", "codigo", bindMap);
 	}
 
 	public String save(OrdenServicio os)  {
 
 		Map<String,Object> bindMap = getBindMap(os);
 
-		String outcome = mapDao.insert("log_ordenservicio", bindMap);
+		String outcome = mapDao.insert("log_orden_servicio", "codigo", bindMap);
 		
 		return outcome;
 	}
@@ -29,7 +29,7 @@ public class OrdenDeServicioDAO {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("telefono", os.getTelefono());
 		map.put("codigo_fabricante", os.getFabricante());
-		map.put("codigo_modelo", os.getMedole());
+		map.put("codigo_modelo", os.getModelo());
 		map.put("numero_serie", os.getSerie());
 		map.put("nombre_cliente", os.getNombre());
 		map.put("email", os.getEmail());
@@ -37,8 +37,11 @@ public class OrdenDeServicioDAO {
 		map.put("direccion", os.getDireccion());
 		map.put("codigo_tiene_factura", os.getClienteTieneFactura());
 		map.put("codigo_falla_1", os.getFalla1());
+		if(os.getFalla2()>-1)
 		map.put("codigo_falla_2", os.getFalla2());
+		if(os.getFalla3()>-1)
 		map.put("codigo_falla_3", os.getFalla3());
+		if(os.getFalla4()>-1)
 		map.put("codigo_falla_4", os.getFalla4());
 		map.put("comentario_ejecutivo", os.getComentario());
 		map.put("codigo_garantia", os.getGarantia());
@@ -47,7 +50,7 @@ public class OrdenDeServicioDAO {
 		map.put("numero_serie_tel_pres", os.getSerieTelefonoPrestado());
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
 		map.put("fecha_factura", os.getFechaFactura());
-		map.put("imagenRegistroDanos", os.getTelefono());
+		//map.put("imagen_final", os.getTelefono());
 		/**
 		 * CREATE TABLE log_orden_servicio
 		 * 
@@ -97,7 +100,19 @@ public class OrdenDeServicioDAO {
 	}
 	
 	public Map<Long,String> getFabricantes(){
-		return mapDao.getMap("log_fabricantes","codigo","desc_fabricante");
+		return mapDao.getMap("log_fabricante","codigo","desc_fabricante");
+	}
+
+	public Map<Long, String> getModelos(long codigoFabricante) {
+		return mapDao.getMap("log_modelos","codigo_fabricante",codigoFabricante, "codigo","desc_modelo");
+	}
+
+	public Map<Long, String> getFallas() {
+		return mapDao.getMap("log_fallas","codigo","desc_falla");
+	}
+
+	public Map<Long, String> getGarantias() {
+		return mapDao.getMap("log_garantias_ejecu","codigo","descripcion");
 	}
 
 }

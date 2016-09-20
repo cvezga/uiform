@@ -11,7 +11,7 @@ public class DB {
 	private static String port = "14432";
 	private static String user = "postgres";
 	private static String pass = "pos_GREEN_BOX_2016";
-	private static String sche = "telefonica_clinte";
+	private static String sche = "telefonica_cliente";
 	
 	public static Connection getConnetion(){
 		Connection connection = null;
@@ -19,6 +19,10 @@ public class DB {
 			Class.forName("org.postgresql.Driver");
 			connection = DriverManager.getConnection(
 					   "jdbc:postgresql://"+host+":"+port+"/"+sche, user, pass);
+			
+			if(connection==null){
+				System.out.println("Connection error");
+			}
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

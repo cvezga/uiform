@@ -1,0 +1,138 @@
+
+
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_log_o_ref_seg_d_71119 FOREIGN KEY (codigo_dependencia)
+      REFERENCES seg_dependencias (codigo) MATCH Unknown
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+;
+Tablas de combos 
+Marcas
+CREATE TABLE log_fabricante
+(
+  codigo numeric(2,0) NOT NULL,
+  desc_fabricante character varying(30),
+  codigo_destino_con_garantia numeric(4,0),
+  codigo_destino_sin_garantia numeric(4,0),
+  CONSTRAINT pk_log_fabricante PRIMARY KEY (codigo ),
+  CONSTRAINT fk_log_f_ref_log_t_31380 FOREIGN KEY (codigo_destino_con_garantia)
+      REFERENCES log_tiendas (codigo) MATCH Unknown
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_log_f_ref_log_t_31381 FOREIGN KEY (codigo_destino_sin_garantia)
+      REFERENCES log_tiendas (codigo) MATCH Unknown
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+Modelos 
+CREATE TABLE log_modelos
+(
+  codigo numeric(3,0) NOT NULL,
+  codigo_fabricante numeric(2,0),
+  desc_modelo character varying(50),
+  CONSTRAINT pk_log_modelos PRIMARY KEY (codigo ),
+  CONSTRAINT fk_log_m_ref_log_f_39310 FOREIGN KEY (codigo_fabricante)
+      REFERENCES log_fabricante (codigo) MATCH Unknown
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+Garantías 
+CREATE TABLE log_garantias_ejecu
+(
+    codigo numeric(2,0) NOT NULL,
+    descripcion character varying(50),
+    codigo_con_factura numeric(1,0),
+    CONSTRAINT pk_log_garantias_ejecu PRIMARY KEY (codigo ),
+    CONSTRAINT fk_log_g_ref_log_g_60490 FOREIGN KEY (codigo_con_factura)
+         REFERENCES log_gen_si_no (codigo) MATCH Unknown
+         ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+Fallas 
+CREATE TABLE log_fallas
+(
+    codigo numeric(4,0) NOT NULL,
+    codigo_tipo_falla numeric(2,0),
+    desc_falla character varying(100),
+    CONSTRAINT pk_log_fallas PRIMARY KEY (codigo ),
+    CONSTRAINT fk_log_f_ref_log_t_37320 FOREIGN KEY (codigo_tipo_falla)
+         REFERENCES log_tipo_falla (codigo) MATCH Unknown
+         ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+Aqui lo que se captura son los datos del formulario 
+Luego con la orden capturada se procede a pintar los daños del dispositivo.   Se crea una imagen “png” 
+y se guarda en la tabla de ordenes.    Esta labor la realiza un programa PHP y graba en la base de datos. 
+La imagen.   El reporte y está hecho en Jasper 
+Descripcion del PROCESO 
+La creacion de la orden es sobre la tabla 
+ log_orden_servicio 
+   llave codigo  ( es un consecutivo general ) y se incremeta con cada orden 
+  Se lee la ultima orden y se le incrementa uno.   
+Al dar el boton de PINTAR, se debería crear la orden para que el pintador pueda 
+hacer udpate en la tabla log_orden_servicio con el dato de la imagen. 
+Pues debe saber a cual orden de servicio le debe grabar los datos. 
+Al llamar al boton PINTAR DEBERA dar 
+   insert a la tabla LOG_ORDEN_SERVICIO con el codigo = select max(codigo)+1 from 
+log_orden_servicio y los datos digitados 
+    Con el fin de que los datos de imagen en blanco estén disponibles,
+     "la imagen de fondo de los telefonos sin pintar".
+Al levantar PINTADOR, se lee la imagen y se pinta y al SALVAR se debe cerrar.
+LUego en la pantalla de CAPTURA debemos tener un BOTON DE REPORTE que llama al reporte 
+jasper que pinta la orden. 
+Como comentario en la pantalla pintador se llama al reporte. 
+  
+Las marcas de los telefonos se leen de la tabla 
+   LOG_MARCAS 
+Los modelos de los telefonos se leen de la tabla 
+   LOG_MODELOS 
+  Pero se condicionan con la marca seleccionada.  Es decir si se escoge ALCATEL de marca, solo se 
+muestran modelos de la marca alcatel 
+Las marcas de los telefonos prestados  se leen de la tabla 
+   LOG_MARCAS 
+Los modelos de los telefonos prestado se leen de la tabla 
+   LOG_MODELOS 
+  Pero se condicionan con la marca de telefono prestada seleccionada.  Es decir si se escoge SONY de 
+marca, solo se muestran modelos de la marca SONY. 
+Las garantias se leen de la tabla log_garantia_ejecu 
+   De manera que se muestran los registros dependiendo de si  
+   el usuario MARCÓ que el cliente TIENE FACTURA 
+  
+    SELECT * FROM log_garantias_ejecu 
+    WHERE CODIGO_CON_FACTURA = ( seleccion de pantalla donde indica que trae o NO 
+FACTURA ) 
+          
+CREATE TABLE log_garantias_ejecu
+(
+  codigo numeric(2,0) NOT NULL,
+  descripcion character varying(50),
+  codigo_con_factura numeric(1,0),
+  CONSTRAINT pk_log_garantias_ejecu PRIMARY KEY (codigo ),
+  CONSTRAINT fk_log_g_ref_log_g_60490 FOREIGN KEY (codigo_con_factura)
+      REFERENCES log_gen_si_no (codigo) MATCH Unknown
+      ON UPDATE NO ACTION ON DELETE NO ACTION
+)
+Los campos de FALLA FALLA 2 FALLA3 FALLA4 
+   El combo se lee de la tabla LOG_FALLAS 
+La ventana de DETALLES Se requiere 
+  PONEMOS un BOTON DE ACCESORIOS  
+
+       Se puede poner un pop-uo emergente 
+         Se muestra y graba en la tabla log_deta_Orden_servi con llaves 
+         codigo_tramite_orden_servicio=1        
+         codigo_orden_servicio= la que se generó LA ACTUAL 
+         consecutivo= EL Ultimo +1 
+         codigo_accesorio = combo de la tabla de accesorios 
+         descripcin = es la descripcion o detalle de lo que encontraron en la revision de los accesorios 
+     
+      CREATE TABLE log_deta_orden_servi
+    (
+      codigo_tramite_orden_servicio numeric(3,0) NOT NULL,
+      codigo_orden_servicio numeric(5,0) NOT NULL,
+      consecutivo numeric(2,0) NOT NULL,
+      codigo_accesorio numeric(2,0),
+      descripcin character varying(150),
+      CONSTRAINT pk_log_deta_orden_servi PRIMARY KEY (codigo_tramite_orden_servicio , 
+    codigo_orden_servicio , consecutivo ),
+      CONSTRAINT fk_log_d_ref_log_a_73561 FOREIGN KEY (codigo_accesorio)
+          REFERENCES log_accesorios (codigo) MATCH Unknown
+          ON UPDATE NO ACTION ON DELETE NO ACTION,
+      CONSTRAINT fk_log_d_ref_log_o_73710 FOREIGN KEY (codigo_tramite_orden_servicio, 
+    codigo_orden_servicio)
+          REFERENCES log_orden_servicio (codigo_tramite, codigo) MATCH Unknown
+          ON UPDATE NO ACTION ON DELETE NO ACTION

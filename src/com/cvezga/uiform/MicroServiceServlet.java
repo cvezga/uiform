@@ -20,7 +20,7 @@ public class MicroServiceServlet extends HttpServlet {
 
 	private static Map<String,String> paramMap = new HashMap<String,String>();
 	private static Map<String,BO> requestHandlerMap = new HashMap<String,BO>();
-	
+	private static long CACHE_TIME = 5 * 60 * 1000;
     /**
      * Default constructor. 
      */
@@ -46,16 +46,42 @@ public class MicroServiceServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		BO bo = getBO(request.getRequestURI());
+		String outcome = "";
+		if(bo!=null){
+			
+			Map<String, String> newMap = getNewMap(request.getParameterMap());
+			newMap.put("model", request.getParameter("model"));
+			outcome = bo.process(newMap);
+			
+			System.out.println("outcome:"+outcome);
+		
+		}
+		
+		 long expiry = System.currentTimeMillis() + CACHE_TIME;
+
+		    HttpServletResponse httpResponse = (HttpServletResponse)response;
+		    httpResponse.setDateHeader("Expires", expiry);
+		    httpResponse.setHeader("Cache-Control", "max-age="+ CACHE_TIME);
+		response.getWriter().append(outcome);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		BO bo = getBO(request.getRequestURI());
+		if(bo!=null){
+			
+			Map<String, String> newMap = getNewMap(request.getParameterMap());
+			String outcome = bo.process(newMap);
+		
+		}
+		//doGet(request, response);
+	}
+	
+	private BO getBO(String uri){
 		BO bo = null;
-		String uri = request.getRequestURI();
 		int idx1 = uri.lastIndexOf("/");
 		int idx2 = uri.lastIndexOf(".ms");
 		if(idx1>-1 && idx1<idx2){
@@ -81,13 +107,8 @@ public class MicroServiceServlet extends HttpServlet {
 			
 			}
 		}
-		if(bo!=null){
-			
-			Map<String, String> newMap = getNewMap(request.getParameterMap());
-			String outcome = bo.process(newMap);
 		
-		}
-		doGet(request, response);
+		return bo;
 	}
 
 	private Map<String, String> getNewMap(Map<String, String[]> parameterMap) {
