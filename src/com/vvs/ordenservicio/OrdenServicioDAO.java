@@ -122,17 +122,18 @@ public class OrdenServicioDAO {
 	public void saveImage(byte[] image, long id) {
 		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
 		ByteArrayInputStream bais = new ByteArrayInputStream(image);
+		System.out.println(bais.available());
 		Connection con = DB.getConnection();
 		 
 		PreparedStatement ps = null;
 		try {
 			con.setAutoCommit(false);
 			ps = con.prepareStatement(sql);
-			//ps.setBinaryStream(1, bais);
-			ps.setBytes(1, image);
+			ps.setBinaryStream(1, bais, image.length);
+			//ps.setBytes(1, image);
 			ps.setLong(2, id);
 			ps.executeUpdate();
-			con.commit();
+			 
 			
 			
 		} catch (SQLException e) {
@@ -146,6 +147,7 @@ public class OrdenServicioDAO {
 				e.printStackTrace();
 			}
 			try {
+				con.commit();
 				con.close();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
