@@ -76,6 +76,11 @@ var canvas,ctx;
 			   });
 		  
 		  paintImage();
+		  
+		  $('#myCanvas').mousedown(function (e) {
+		        mousePressed = true;
+		        Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+		    });
 		
 	});
 	
@@ -185,27 +190,20 @@ var canvas,ctx;
 		     ctx=canvas.getContext("2d");
 		    var img=document.getElementById("casopng");
 		    ctx.drawImage(img,0,0);
-		    canvas.addEventListener("mouseup", function (e) {
-	            findxy(e)
-	        }, false);
+		 
 	}
 	
-	function findxy( e) {
-        
-            
-            x = e.clientX - canvas.offsetLeft;
-            y = e.clientY - canvas.offsetTop;
-    
-          
-            ctx.beginPath();
-            ctx.fillStyle = "red";
-            ctx.rect(x, y, 10, 10);
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = 'red';
-            ctx.stroke(); 
-            ctx.closePath();
-          
-    }
+	function Draw(x, y) {
+	    
+        ctx.beginPath();
+        ctx.strokeStyle = 'red';
+        ctx.lineWidth = 2;
+        ctx.lineJoin = "round";
+        ctx.rect(x, y, 10, 10);
+        ctx.closePath();
+        ctx.stroke();
+	  
+	}
 </script>
 </head>
 <body>
