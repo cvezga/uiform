@@ -57,10 +57,15 @@ var canvas,ctx;
 		           json: JSON.stringify(jsonform)
 		        },
 		        function(data,status){
-		        	if(data != "success"){
+		        	if(!data.startsWith("success")){
 		        		$("#errmsg").html(data);
 			               return false;
-		        		}
+		        	}else{
+		        		idx1 = data.indexOf(',');
+		        		newId = data.substring(idx1+1);
+		        		uploadImage(newId);
+		        	}
+		        	
 		           alert("Data: " + data + "\nStatus: " + status);
 		        });
 		    });
@@ -203,6 +208,26 @@ var canvas,ctx;
         ctx.closePath();
         ctx.stroke();
 	  
+	}
+	
+	function uploadImage(newId) {
+	    var canvasServer = document.getElementById("myCanvas");
+	    var context = canvasServer.getContext("2d");                    
+	    var imageDataURL = canvasServer.toDataURL('image/png');
+
+	    var xhr = new XMLHttpRequest();
+	    xhr.open("POST", "uploadImage?id="+newId, true);
+	    var boundary = Math.random().toString().substr(2);
+	    xhr.setRequestHeader("content-type", 
+	        "multipart/form-data; charset=utf-8; boundary=" + boundary);
+	    var multipart = "--" + boundary + "\r\n" +
+	        "Content-Disposition: form-data; name=myImg\r\n" +
+	        "Content-type: image/png\r\n\r\n" +
+	        imageDataURL + "\r\n" +
+	        "--" + boundary + "--\r\n";
+	    xhr.send(multipart);    
+	    /*xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    xhr.send("imgData="+imageDataURL);*/
 	}
 </script>
 </head>

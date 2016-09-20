@@ -1,5 +1,9 @@
 package com.vvs.ordenservicio;
 
+import java.io.ByteArrayInputStream;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -113,6 +117,44 @@ public class OrdenServicioDAO {
 
 	public Map<Long, String> getGarantias() {
 		return mapDao.getMap("log_garantias_ejecu","codigo","descripcion");
+	}
+
+	public void saveImage(byte[] image, long id) {
+		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
+		ByteArrayInputStream bais = new ByteArrayInputStream(image);
+		Connection con = DB.getConnection();
+		 
+		PreparedStatement ps = null;
+		try {
+			con.setAutoCommit(false);
+			ps = con.prepareStatement(sql);
+			//ps.setBinaryStream(1, bais);
+			ps.setBytes(1, image);
+			ps.setLong(2, id);
+			ps.executeUpdate();
+			con.commit();
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 	}
 
 }

@@ -13,7 +13,7 @@ public class DB {
 	private static String pass = "pos_GREEN_BOX_2016";
 	private static String sche = "telefonica_cliente";
 	
-	public static Connection getConnetion(){
+	public static Connection getConnection(){
 		Connection connection = null;
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -38,7 +38,7 @@ public class DB {
 	}
 	
 	public static ConnectionHelper getConnectionHelper(){
-		ConnectionHelper ch = new ConnectionHelper(getConnetion());
+		ConnectionHelper ch = new ConnectionHelper(getConnection());
 		return ch;
 	}
 }

@@ -104,4 +104,8 @@ public class OrdenServicioBO implements BO {
 	public Map<Long, String> getGarantias() {
 		return dao.getGarantias();
 	}
+	
+	public void saveImage(byte[] image, long id){
+		dao.saveImage(image,id);
+	}
 }

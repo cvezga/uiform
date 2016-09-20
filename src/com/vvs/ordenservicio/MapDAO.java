@@ -42,6 +42,7 @@ public class MapDAO {
 			int count = ps.executeUpdate();
 			System.out.println("records updated "+count);
 			ch.endTransaction();
+			outcome = outcome+","+newId;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
