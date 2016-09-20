@@ -8,6 +8,16 @@
 <script type="text/javascript">
 var canvas,ctx;
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+    if (results==null){
+       return null;
+    }
+    else{
+       return results[1] || 0;
+    }
+}
+
 	$(document).ready(function(e) {
 		table = $("#table-form");
 		fields =  $("#field-list");
@@ -161,7 +171,8 @@ var canvas,ctx;
 				serieTelefonoPrestado: valueOf('serieTelefonoPrestado'),
 				facturaONotaDeVenta: valueOf('facturaONotaDeVenta'), 
 				fechaFactura: valueOf('fechaFactura'), 
-				imagenRegistroDanos: valueOf('imagenRegistroDanos')	
+				imagenRegistroDanos: valueOf('imagenRegistroDanos'),
+				usuario: $.urlParam('usuario')
 				
 		};
 		

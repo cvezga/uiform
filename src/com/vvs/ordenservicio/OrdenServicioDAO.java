@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,6 +59,8 @@ public class OrdenServicioDAO {
 		map.put("numero_serie_tel_pres", os.getSerieTelefonoPrestado());
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
 		map.put("fecha_factura", os.getFechaFactura());
+		map.put("fecha_modificacion", new Date());
+		map.put("usuario_modificacion", os.getUsuario());
 		//map.put("imagen_final", os.getTelefono());
 		/**
 		 * CREATE TABLE log_orden_servicio

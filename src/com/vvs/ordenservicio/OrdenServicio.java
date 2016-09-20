@@ -25,6 +25,7 @@ public class OrdenServicio {
     private String facturaONotaDeventa; 
     private Date fechaFactura; 
     private String imagenRegistroDanos;
+    private String usuario;
     
 	public int getTelefono() {
 		return telefono;
@@ -152,6 +153,12 @@ public class OrdenServicio {
 	}
 	public void setModelo(int modelo) {
 		this.modelo = modelo;
+	}
+	public String getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
 	}
     
     
