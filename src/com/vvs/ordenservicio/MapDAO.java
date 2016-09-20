@@ -14,9 +14,9 @@ public class MapDAO {
 	
 	private static String SQL_INSERT = "INSERT INTO %TABLE%(%FIELDS%) VALUES(%VALUES%)";
 	
-	public String insert(String table, String id, Map<String, Object> dataMap){
+	public synchronized String insert(String table, String id, Map<String, Object> dataMap){
 		
-	
+	    String outcome = "success";
 		
 		ConnectionHelper ch = DB.getConnectionHelper();
 		
@@ -45,12 +45,13 @@ public class MapDAO {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			outcome = e.getMessage();
 		}finally{
 			ch.closeAll();
 		}
 		
 		
-		return "success";
+		return outcome;
 	}
 
 	private String getInsertSQL(String table, Map<String, Object> dataMap) {
@@ -132,7 +133,7 @@ public class MapDAO {
 		 
 		return map;
 	}
-	private Long getMaxId(Connection con, String table, String key){
+	private  Long getMaxId(Connection con, String table, String key){
 		Long max=-1L;
 		String sql = "SELECT MAX(%KEY%) FROM %TABLE%"
 				.replace("%KEY%", key)

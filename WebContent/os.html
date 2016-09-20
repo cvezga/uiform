@@ -56,7 +56,11 @@
 		           json: JSON.stringify(jsonform)
 		        },
 		        function(data,status){
-		            alert("Data: " + data + "\nStatus: " + status);
+		        	if(data != "success"){
+		        		$("#errmsg").html(data);
+			               return false;
+		        		}
+		           alert("Data: " + data + "\nStatus: " + status);
 		        });
 		    });
 		
@@ -176,7 +180,7 @@
 </head>
 <body>
       <h1>REGISTRO DE ORDEN DE SERVICIO</h1>
-      <div id="msgid" ></div>
+      <div id="errmsg" ></div>
       <table id="table-form" border="1" cellpadding="5" cellspacing="0">
       </table>
       <div id="field-list">
@@ -203,11 +207,42 @@
 	      <div id="imagenRegistroDanos" label="REGISTRO DE DAÑOS"  type="paint" width="100em" height="50em"  />
       </div>
       
-      <button>Send an HTTP POST request to a page and get the result back</button>
+      <table border="1" cellpadding="5" cellspacing="0">
+		<tr>
+			<td>Registro de danos</td>
+		</tr>
+		<tr>
+			<td>
+				<canvas width="600px" height="320px">
+				</canvas>
+			</td>
+		</tr>
+	</table>
+
+	<table border="1" cellpadding="5" cellspacing="0">
+		<tr>
+			<td>Detalled</td>
+		</tr>
+		<tr>
+			<td>
+				<table border="1" cellpadding="5" cellspacing="0">
+					<tr>
+						<th>ACCESORIO</th>
+						<th>DESCIPRION DEL ACCESORIO</th>
+						<th>agrager detale</th>
+					</tr>
+					<tr>
+						<td><select></select></td>
+						<td><input></td>
+						<td>eliminar detalle</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<button>Guardar e Imprimir</button>
       
-      <script>
-      //updateFormEntries();
-      </script>
-      
+       
+       
    </body>
 </html>

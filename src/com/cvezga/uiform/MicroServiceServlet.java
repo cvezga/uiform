@@ -70,14 +70,15 @@ public class MicroServiceServlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String outcome = "";
 		BO bo = getBO(request.getRequestURI());
 		if(bo!=null){
 			
 			Map<String, String> newMap = getNewMap(request.getParameterMap());
-			String outcome = bo.process(newMap);
+			outcome = bo.process(newMap);
 		
 		}
-		//doGet(request, response);
+		response.getWriter().append(outcome);
 	}
 	
 	private BO getBO(String uri){
