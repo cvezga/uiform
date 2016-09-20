@@ -122,6 +122,7 @@ public class OrdenServicioDAO {
 	public void saveImage(byte[] image, long id) {
 		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
 		ByteArrayInputStream bais = new ByteArrayInputStream(image);
+		System.out.println(image.length);
 		System.out.println(bais.available());
 		Connection con = DB.getConnection();
 		 
