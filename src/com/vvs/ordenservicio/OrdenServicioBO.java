@@ -107,5 +107,6 @@ public class OrdenServicioBO implements BO {
 	
 	public void saveImage(byte[] image, long id){
 		dao.saveImage(image,id);
+		dao.saveImageToFile(image, id);
 	}
 }

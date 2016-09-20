@@ -1,6 +1,10 @@
 package com.vvs.ordenservicio;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -155,6 +159,31 @@ public class OrdenServicioDAO {
 				e.printStackTrace();
 			}
 		}
+		
+		
+		
+	}
+
+	public void saveImageToFile(byte[] image, long id) {
+		File dir = new File("/tmp/images");
+		if(!dir.exists()){
+			dir.mkdirs();
+		}
+		File f = new File(dir,"image-"+id+".png");
+		try {
+			FileOutputStream fos = new  FileOutputStream(f);
+			fos.write(image, 0, image.length);
+			fos.flush();
+			fos.close();
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		
 		
 		
