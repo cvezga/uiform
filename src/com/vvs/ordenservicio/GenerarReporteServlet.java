@@ -64,6 +64,8 @@ public class GenerarReporteServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
+	//TODO
+	/**
 	private void generarReporte(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String nombreArchivo = this.reporte.getNombreReal();
 		HashMap<String, Object> parametrosReporte = new HashMap<String, Object>();
@@ -250,5 +252,5 @@ public class GenerarReporteServlet extends HttpServlet {
 
 		}
 	}
-
+     **/
 }
