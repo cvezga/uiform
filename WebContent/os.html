@@ -8,14 +8,14 @@
 <script type="text/javascript">
 var canvas,ctx;
 
-$.urlParam = function(name){
-    var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
-    if (results==null){
-       return null;
-    }
-    else{
-       return results[1] || 0;
-    }
+$.urlParam = function(name) {
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)')
+			.exec(window.location.href);
+	if (results == null) {
+		return null;
+	} else {
+		return results[1] || 0;
+	}
 }
 
 	$(document).ready(function(e) {
@@ -67,6 +67,7 @@ $.urlParam = function(name){
 		           json: JSON.stringify(jsonform)
 		        },
 		        function(data,status){
+		        	alert($.urlParam('usuario'));
 		        	if(!data.startsWith("success")){
 		        		$("#errmsg").html(data);
 			               return false;
