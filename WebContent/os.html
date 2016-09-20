@@ -6,7 +6,8 @@
 <script type="text/javascript" src="js/jquery-3.1.0.min.js"></script>
 
 <script type="text/javascript">
-       
+var canvas,ctx;
+
 	$(document).ready(function(e) {
 		table = $("#table-form");
 		fields =  $("#field-list");
@@ -73,6 +74,8 @@
 			               return false;
 			    }
 			   });
+		  
+		  paintImage();
 		
 	});
 	
@@ -176,6 +179,33 @@
 			$('#'+target+'-input').append(options);
 		}
 	}
+	
+	function paintImage(){
+		  canvas=document.getElementById("myCanvas");
+		     ctx=canvas.getContext("2d");
+		    var img=document.getElementById("casopng");
+		    ctx.drawImage(img,0,0);
+		    canvas.addEventListener("mouseup", function (e) {
+	            findxy(e)
+	        }, false);
+	}
+	
+	function findxy( e) {
+        
+            
+            x = e.clientX - canvas.offsetLeft;
+            y = e.clientY - canvas.offsetTop;
+    
+          
+            ctx.beginPath();
+            ctx.fillStyle = "red";
+            ctx.rect(x, y, 10, 10);
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = 'red';
+            ctx.stroke(); 
+            ctx.closePath();
+          
+    }
 </script>
 </head>
 <body>
@@ -213,7 +243,7 @@
 		</tr>
 		<tr>
 			<td>
-				<canvas width="600px" height="320px">
+				<canvas  id="myCanvas" width="900px" height="320px">
 				</canvas>
 			</td>
 		</tr>
@@ -243,6 +273,7 @@
 	<button>Guardar e Imprimir</button>
       
        
+       <img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
        
    </body>
 </html>
