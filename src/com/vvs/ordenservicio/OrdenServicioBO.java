@@ -45,6 +45,8 @@ public class OrdenServicioBO implements BO {
 		Map<Long, String> map = null;
 		if ("modelos".equals(model)) {
 			map = getModelos(lid);
+		}else if("garantias".equals(model)){
+			map = getGarantias(lid);
 		}
 		if (map != null) {
 			json = JsonUtil.toJson(map);
@@ -55,6 +57,8 @@ public class OrdenServicioBO implements BO {
 
 		return null;
 	}
+
+	
 
 	private String getModelData(String model) {
 		String json = modelCacheMap.get(model);
@@ -97,6 +101,10 @@ public class OrdenServicioBO implements BO {
 		return dao.getModelos(codigoFabricante);
 	}
 
+	private Map<Long, String> getGarantias(long tieneFactura) {
+		return dao.getGarantias(tieneFactura);
+	}
+	
 	public Map<Long, String> getFallas() {
 		return dao.getFallas();
 	}

@@ -20,7 +20,7 @@ public class MicroServiceServlet extends HttpServlet {
 
 	private static Map<String,String> paramMap = new HashMap<String,String>();
 	private static Map<String,BO> requestHandlerMap = new HashMap<String,BO>();
-	private static long CACHE_TIME = 5 * 60 * 1000;
+	private static long CACHE_TIME = 5 * 60 * 1000; //5 Minutos
     /**
      * Default constructor. 
      */
@@ -62,8 +62,15 @@ public class MicroServiceServlet extends HttpServlet {
 
 		    HttpServletResponse httpResponse = (HttpServletResponse)response;
 		    httpResponse.setDateHeader("Expires", expiry);
-		    httpResponse.setHeader("Cache-Control", "max-age="+ CACHE_TIME);
-		response.getWriter().append(outcome);
+		    httpResponse.setHeader("Cache-Control", "max-age="+ CACHE_TIME / 1000);
+		    
+		    /**
+		    String jsonString = new Gson().toJson(objectToEncode);
+		    byte[] utf8JsonString = jsonString.getBytes("UTF8");
+		    responseToClient.write(utf8JsonString, 0, utf8JsonString.Length);
+		    **/
+		    byte[] utf8JsonString = outcome.getBytes("UTF8");
+		response.getOutputStream().write(utf8JsonString); 
 	}
 
 	/**
@@ -78,7 +85,7 @@ public class MicroServiceServlet extends HttpServlet {
 			outcome = bo.process(newMap);
 		
 		}
-		response.getWriter().append(outcome);
+		response.getWriter().write(outcome);
 	}
 	
 	private BO getBO(String uri){

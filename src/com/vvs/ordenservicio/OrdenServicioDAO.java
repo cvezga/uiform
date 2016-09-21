@@ -118,6 +118,9 @@ public class OrdenServicioDAO {
 		return mapDao.getMap("log_modelos","codigo_fabricante",codigoFabricante, "codigo","desc_modelo");
 	}
 
+	public Map<Long, String> getGarantias(long tieneFactura) {
+		return mapDao.getMap("log_garantias_ejecu","codigo_con_factura",tieneFactura, "codigo","descripcion");
+	}
 	public Map<Long, String> getFallas() {
 		return mapDao.getMap("log_fallas","codigo","desc_falla");
 	}
@@ -137,8 +140,8 @@ public class OrdenServicioDAO {
 		try {
 			con.setAutoCommit(false);
 			ps = con.prepareStatement(sql);
-			ps.setBinaryStream(1, bais, image.length);
-			//ps.setBytes(1, image);
+			//ps.setBinaryStream(1, bais, image.length);
+			ps.setBytes(1, image);
 			ps.setLong(2, id);
 			ps.executeUpdate();
 			 
@@ -191,5 +194,7 @@ public class OrdenServicioDAO {
 		
 		
 	}
+
+	
 
 }
