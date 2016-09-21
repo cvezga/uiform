@@ -39,7 +39,7 @@ public class OrdenServicioDAO {
 		map.put("telefono", os.getTelefono());
 		map.put("codigo_fabricante", os.getFabricante());
 		map.put("codigo_modelo", os.getModelo());
-		map.put("numero_serie", os.getSerie());
+		map.put("numero_serie_tel", os.getSerie());
 		map.put("nombre_cliente", os.getNombre());
 		map.put("email", os.getEmail());
 		map.put("telefono_personal", os.getTelefonoPersona());
@@ -58,7 +58,7 @@ public class OrdenServicioDAO {
 			map.put("codigo_fabricante_tel_pres", os.getFabricanteTelefonoPrestado());
 			map.put("codigo_modelo_tel_pres", os.getModeloTelefonoPrestado());
 		}
-		map.put("numero_serie_tel_pres", os.getSerieTelefonoPrestado());
+		map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
 		map.put("fecha_factura", os.getFechaFactura());
 		map.put("fecha_modificacion", new Date());
