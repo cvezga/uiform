@@ -72,6 +72,7 @@ $.urlParam = function(name) {
 		})
 
 		  $("button").click(function(){
+			    $('#img-load').show();
 			    $("#errmsg").empty();
 		    	var jsonform = getForm();
 		    	if(!hasValidationError){
@@ -97,6 +98,7 @@ $.urlParam = function(name) {
 			           }
 			        });
 		    	}
+		    	$('#img-load').hide();
 		    });
 		
 		
@@ -116,6 +118,7 @@ $.urlParam = function(name) {
 		        Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
 		    });
 		
+		  $('#img-load').hide();
 	});
 	
 	function getOptions(modelName){
@@ -203,7 +206,7 @@ $.urlParam = function(name) {
 	function valueOf(fieldName, required){
 		value =   $('#'+fieldName+'-input').prop('value');
 		if(required && ( !value || value == -1 || value.replace(/\s/g, '').length == 0)){
-			$("#errmsg").html("El campo <b>"+$('#'+fieldName).attr('label')+"</b> es requesrido");
+			$("#errmsg").html("El campo <b>"+$('#'+fieldName).attr('label')+"</b> es requerido");
 			hasValidationError=true;
             return false;
 
@@ -304,8 +307,8 @@ $.urlParam = function(name) {
 </script>
 </head>
 <body>
-      <h1>REGISTRO DE ORDEN DE SERVICIO</h1>
-     
+      <h1>REGISTRO DE ORDEN DE SERVICIO <img id="img-load" src="images/load.gif"></h1>
+      
       <table id="table-form" border="1" cellpadding="5" cellspacing="0">
       </table>
       <div id="field-list">
@@ -334,7 +337,7 @@ $.urlParam = function(name) {
        <p id="errmsg" style="color:red;"></p>
       <table border="1" cellpadding="5" cellspacing="0">
 		<tr>
-			<td>Registro de danos</td>
+			<th>REGISTRO DE DAÑOS</th>
 		</tr>
 		<tr>
 			<td>
@@ -367,7 +370,10 @@ $.urlParam = function(name) {
 			</td>
 		</tr>
 	</table>
-	<button>Guardar e Imprimir</button>
+	<table width="100%">
+	<tr><th><button >Guardar e Imprimir</button></th></tr>
+	</table>
+	
       
        
        <img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
