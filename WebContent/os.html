@@ -274,6 +274,33 @@ $.urlParam = function(name) {
 	    /*xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
 	    xhr.send("imgData="+imageDataURL);*/
 	}
+	
+	var rowCount=1;
+	function addAccesorios(){
+		
+		options = getOptions('accesorios');
+		
+		 
+		 newTR = '<tr id="accesorio-row-%row%">'
+			+'<td><select id="accesorio-%row%">'+options+'</select></td>'
+			+'<td><input  id="descripcion-accesorio-%row%"></td>'
+			+'<td><img src="images/Delete.png" onclick="remove(\'accesorio-row-%row%\');"></td>'
+		    +'</tr>';
+		    
+		 rowCount++;
+		 
+		 trn = newTR.replace(/%row%/g,rowCount);
+		
+		 table = $("#detalle-table");
+			
+		 table.append(trn);
+		 
+	}
+	
+	function remove(id){
+		$('#'+id).empty();
+		//rowCount--;
+	}
 </script>
 </head>
 <body>
@@ -317,23 +344,25 @@ $.urlParam = function(name) {
 		</tr>
 	</table>
 
-	<table border="1" cellpadding="5" cellspacing="0">
+	<table  border="1" cellpadding="5" cellspacing="0">
 		<tr>
-			<td>Detalled</td>
+			<th>Detalle</th>
 		</tr>
 		<tr>
 			<td>
-				<table border="1" cellpadding="5" cellspacing="0">
+				<table id="detalle-table" border="1" cellpadding="5" cellspacing="0">
 					<tr>
 						<th>ACCESORIO</th>
-						<th>DESCIPRION DEL ACCESORIO</th>
-						<th>agrager detale</th>
+						<th>DESCRIPCION DEL ACCESORIO</th>
+						<th><img src="images/add.png" onclick="addAccesorios();"></th>
 					</tr>
-					<tr>
-						<td><select></select></td>
-						<td><input></td>
-						<td>eliminar detalle</td>
+					<!-- 
+					<tr id="accesorio-row-1">
+						<td><select id="accesorio-1"></select></td>
+						<td><input  id="descripcion-accesorio-1"></td>
+						<td><img src="images/Delete.png" onclick="remove('accesorio-row-1');"></td>
 					</tr>
+					 -->
 				</table>
 			</td>
 		</tr>

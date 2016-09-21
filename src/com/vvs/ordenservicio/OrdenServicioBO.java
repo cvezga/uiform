@@ -74,6 +74,8 @@ public class OrdenServicioBO implements BO {
 			map = getGarantias();
 		} else if ("tieneFacturas".equals(model)) {
 			map = getTieneFacturas();
+		} else if ("accesorios".equals(model)) {
+			map = getAccesorios();
 		}
 		if (map != null) {
 			json = JsonUtil.toJson(map);
@@ -111,6 +113,10 @@ public class OrdenServicioBO implements BO {
 
 	public Map<Long, String> getGarantias() {
 		return dao.getGarantias();
+	}
+	
+	public Map<Long, String> getAccesorios() {
+		return dao.getAccesorios();
 	}
 	
 	public void saveImage(byte[] image, long id){

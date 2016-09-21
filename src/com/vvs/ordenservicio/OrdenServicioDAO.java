@@ -128,7 +128,12 @@ public class OrdenServicioDAO {
 	public Map<Long, String> getGarantias() {
 		return mapDao.getMap("log_garantias_ejecu","codigo","descripcion");
 	}
+	
+	public Map<Long, String> getAccesorios() {
+		return mapDao.getMap("log_accesorios","codigo","descripcion");
+	}
 
+	
 	public void saveImage(byte[] image, long id) {
 		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
 		ByteArrayInputStream bais = new ByteArrayInputStream(image);
