@@ -134,7 +134,12 @@ public class OrdenServicioDAO {
 	public Map<Long, String> getFallasTipos() {
 		Map<Long, String> map = new LinkedHashMap<Long, String>();
 		map.put(-1L, "-- Seleccione --");
-		String sql = "SELECT f.codigo, tf.desc_tipo_falla ' - ' || f.desc_falla as desc_falla,tf.desc_tipo_falla,f.desc_falla  from log_fallas f, log_tipo_falla tf ORDER BY tf.desc_tipo_falla,f.desc_tipo_falla";
+		
+		String sql 
+		= "SELECT f.codigo, tf.desc_tp_falla || ' - ' || f.desc_falla as desc_falla" 
+		+ " from log_fallas f, log_tipo_falla tf "
+		+ " WHERE f.codigo_tipo_falla = tf.codigo "
+		+ " ORDER BY tf.desc_tp_falla, f.desc_falla";
 		
 		ConnectionHelper ch = DB.getConnectionHelper();
 		try {
