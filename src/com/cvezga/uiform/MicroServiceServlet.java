@@ -85,7 +85,10 @@ public class MicroServiceServlet extends HttpServlet {
 			outcome = bo.process(newMap);
 		
 		}
-		response.getWriter().write(outcome);
+		
+		 byte[] utf8String = outcome.getBytes("UTF8");
+		 response.getOutputStream().write(utf8String); 
+		 
 	}
 	
 	private BO getBO(String uri){
