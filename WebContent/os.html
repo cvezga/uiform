@@ -212,19 +212,19 @@ $.urlParam = function(name) {
 		if(!form.fechaFactura){
 			form.fechaFactura = '01/01/1900';
 		}
-		if(!if(hasValidationError) && form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
+		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
 			$("#errmsg").html("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
 			hasValidationError=true;
 		}else
-		if(!if(hasValidationError) && form.clienteTieneFactura>-1 && form.garantia==-1){
+		if(!hasValidationError && form.clienteTieneFactura>-1 && form.garantia==-1){
 			$("#errmsg").html("Selectione <b>GARANTÍA</b>");
 			hasValidationError=true;
 		}else
-		if(!if(hasValidationError) && form.clienteTieneFactura==1 && isEmpty(form.facturaONotaDeVenta)){
+		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.facturaONotaDeVenta)){
 			$("#errmsg").html("Digite <b>FACTURA / NOTA DE VENTA</b>");
 			hasValidationError=true;
 		}else
-		if(!if(hasValidationError) && form.clienteTieneFactura==1 && isEmpty(form.fechaFactura)){
+		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.fechaFactura)){
 			$("#errmsg").html("Digite <b>FECHA DE FACTURA</b>");
 			hasValidationError=true;
 		}
