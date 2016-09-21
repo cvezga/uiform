@@ -232,6 +232,10 @@ $( function() {
 				
 		};
 		
+		if(!form.modeloTelefonoPrestado){
+			form.modeloTelefonoPrestado=-1;
+		}
+		
 		if(!form.fechaFactura){
 			form.fechaFactura = '01/01/1900';
 		}else{

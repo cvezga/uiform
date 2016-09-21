@@ -9,12 +9,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OrdenServicioDAO {
+	
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
 
 	private static MapDAO mapDao = new MapDAO();
 
@@ -64,7 +67,12 @@ public class OrdenServicioDAO {
 		   map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
 		}
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
-		map.put("fecha_factura", os.getFechaFactura());
+		try{
+		if(os.getFechaFactura()!=null && "19000101".compareTo(sdf.format(os.getFechaFactura()))<0)
+		    map.put("fecha_factura", os.getFechaFactura());
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 		map.put("fecha_modificacion", new Date());
 		map.put("usuario_modificacion", os.getUsuario());
 		//map.put("imagen_final", os.getTelefono());
