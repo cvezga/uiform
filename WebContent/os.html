@@ -43,10 +43,10 @@ $.urlParam = function(name) {
 				   xmaxlength=' maxlength="'+maxlength.value+'" ';
 			   }
 			   size =  v.attributes["size"];
-			   xsize='';
 			   if(size){
 				   xsize=' size="'+size.value+'" ';
 			   }
+			   xwidth = ' width=\"200px\"' ;
 			   if(typeof(type) !== "undefined" && type != null && "combo" == type.value){
 				   model  =  v.attributes["model"];
 				   if(model){
@@ -68,9 +68,9 @@ $.urlParam = function(name) {
 				  	   
 			   }else{
 				   if(type && type.value == 'numeric'){
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+"></td></tr>");
+					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+xwidth+"></td></tr>");
 				   }else{
-               		   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\" width=\"200px\" "+xmaxlength+xsize+"></td></tr>");
+               		   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\" width=\"200px\" "+xmaxlength+xsize+xwidth+"></td></tr>");
 				   }
 			   }
 		   });
