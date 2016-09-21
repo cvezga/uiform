@@ -27,6 +27,7 @@ public class MapDAO {
 			 long newId = maxId + 1;
 			 dataMap.put(id, newId);
 		 	 String sql = getInsertSQL(table,dataMap);
+		 	 System.out.println(sql);
 			 ps = ch.prepareStatement(sql);
 			int idx=0;
 			for(Entry<String,Object> entry : dataMap.entrySet()){
