@@ -6,8 +6,26 @@
 <title>Orden de Servicio</title>
 <link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui.css">
  <!--  <link rel="stylesheet" href="/resources/demos/style.css">  -->
+ <style>
+  .custom-combobox {
+    position: relative;
+    display: inline-block;
+  }
+  .custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+  }
+  .custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+  }
+  </style>
  <script src="js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
  <script src="js/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+
 
 <script type="text/javascript">
 var canvas,ctx;
@@ -75,9 +93,9 @@ $( function() {
 				   onchange  =  v.attributes["onchange"];
 				   
 				   if(onchange){
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><select id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></td></tr>");
+					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
 				   }else{
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><select id=\""+id.value+"-input\" >"+options+"</select></td></tr>");
+					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
 					   
 				   }
 				   onchange="myFunction()";
@@ -381,10 +399,13 @@ $( function() {
 </script>
 </head>
 <body>
+
+
       <h1>REGISTRO DE ORDEN DE SERVICIO <img id="img-load" src="images/load.gif"></h1>
-      
+     
       <table id="table-form" border="1" cellpadding="5" cellspacing="0">
       </table>
+       
       <div id="field-list">
           <div id="telefono" label="TELÉFONO" required="true" max-length="8" type="numeric" />
 	      <div id="fabricante" label="FABRICANTE"  required="true" type="combo" model="fabricantes" onchange="comboChange(this,'modelo','modelos')" />
@@ -404,8 +425,8 @@ $( function() {
 	      <div id="fabricanteTelefonoPrestado" label="FABRICANTE TELÉFONO PRESTADO"  type="combo" model="fabricantes" onchange="comboChange(this,'modeloTelefonoPrestado','modelos')" /> 
 	      <div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"  type="combo"  />  
 	      <div id="serieTelefonoPrestado" label="# SERIE (IMEI) TELÉFONO PRESTADO"  type="numeric" min-length="15" max-length="15"/>
-	      <div id="facturaONotaDeVenta" label="FACTURA / NOTA DE VENTA" max-length="8" use-class="datepicker" /> 
-	      <div id="fechaFactura" label="FECHA DE FACTURA" min-length="10" max-length="10" type="date"/> 
+	      <div id="facturaONotaDeVenta" label="FACTURA / NOTA DE VENTA" max-length="8"  /> 
+	      <div id="fechaFactura" label="FECHA DE FACTURA" min-length="10" max-length="10" type="date" use-class="datepicker"/> 
       </div>
        <p id="errmsg" style="color:red;"></p>
    
@@ -458,3 +479,4 @@ $( function() {
        
    </body>
 </html>
+<script src="js/combo-search.js"></script>
