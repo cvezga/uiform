@@ -64,15 +64,14 @@ public class GenerarReporteServlet extends HttpServlet {
 		doGet(request, response);
 	}
 
-	//TODO
-	/**
+	 /**
 	private void generarReporte(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String nombreArchivo = this.reporte.getNombreReal();
 		HashMap<String, Object> parametrosReporte = new HashMap<String, Object>();
 
 
 
-		ServletContext servletContext = (ServletContext) this.getFacesContext().getExternalContext().getContext();
+		ServletContext servletContext = (ServletContext) this.getServletConfig(); // this.getFacesContext().getExternalContext().getContext();
 		// String path = servletContext.getRealPath(File.separatorChar + ".." +
 		// File.separatorChar + "recursos" + File.separatorChar);
 		String path = servletContext.getRealPath("");

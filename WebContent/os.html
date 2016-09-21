@@ -90,9 +90,9 @@ $.urlParam = function(name) {
 			        		idx1 = data.indexOf(',');
 			        		newId = data.substring(idx1+1);
 			        		uploadImage(newId);
+ 				            alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
 			        	}
 			        	
-			           alert("Data: " + data + "\nStatus: " + status);
 			           if(data.startsWith("success") && "success" == status){
 			        	   location.reload();
 			           }
@@ -190,8 +190,8 @@ $.urlParam = function(name) {
 				falla4: valueOf('falla4'),  
 				comentario: valueOf('comentario',true), 
 				garantia: valueOf('garantia',true), 
-				fabricanteTelefonoPrestado: valueOf('fabricanteTelefonoPrestado'), 
-				modeloTelefonoPrestado: valueOf('modeloTelefonoPrestado'),  
+				fabricanteTelefonoPrestado: valueOf('fabricanteTelefonoPrestado',false,-1), 
+				modeloTelefonoPrestado: valueOf('modeloTelefonoPrestado',false,-1),  
 				serieTelefonoPrestado: valueOf('serieTelefonoPrestado'),
 				facturaONotaDeVenta: valueOf('facturaONotaDeVenta'), 
 				fechaFactura: valueOf('fechaFactura'), 
@@ -199,8 +199,24 @@ $.urlParam = function(name) {
 				usuario: $.urlParam('usuario')
 				
 		};
-		
+		if(!form.serieTelefonoPrestado){
+			form.serieTelefonoPrestado='0';
+		}
+		if(!form.modeloTelefonoPrestado){
+			form.modeloTelefonoPrestado='0';
+		}
+		if(!form.fechaFactura){
+			form.fechaFactura = '01/01/1900';
+		}
+		if(form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
+			$("#errmsg").html("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
+			hasValidationError=true;
+		}
 		return form;
+	}
+	
+	function isEmpty(value){
+		return value==null || !value || value.replace(/\s/g, '').length == 0;
 	}
 	
 	function valueOf(fieldName, required){
