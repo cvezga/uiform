@@ -58,7 +58,9 @@ public class OrdenServicioDAO {
 			map.put("codigo_fabricante_tel_pres", os.getFabricanteTelefonoPrestado());
 			map.put("codigo_modelo_tel_pres", os.getModeloTelefonoPrestado());
 		}
-		map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
+		if(os.getSerieTelefonoPrestado()>0){
+		   map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
+		}
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
 		map.put("fecha_factura", os.getFechaFactura());
 		map.put("fecha_modificacion", new Date());
