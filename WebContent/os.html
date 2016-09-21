@@ -236,25 +236,7 @@ $( function() {
 			form.modeloTelefonoPrestado=-1;
 		}
 		
-		if(!form.fechaFactura){
-			form.fechaFactura = '01/01/1900';
-		}else{
-			dd= form.fechaFactura.substring(0,2);
-			if(!isNaN(dd) && dd>31){
-				$("#errmsg").html("Formato de fecha invalido");
-				hasValidationError=true;
-			}
-			mm= form.fechaFactura.substring(3,5);
-			if(!isNaN(mm) && (mm<1 || mm>12)){
-				$("#errmsg").html("Formato de fecha invalido");
-				hasValidationError=true;
-			}
-			yy= form.fechaFactura.substring(6,10);
-			if(isNaN(dd) || isNaN(dd) || isNaN(dd)){
-				$("#errmsg").html("Formato de fecha invalido");
-				hasValidationError=true;
-			}
-		}
+		
 		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
 			$("#errmsg").html("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
 			hasValidationError=true;
@@ -271,6 +253,28 @@ $( function() {
 			$("#errmsg").html("Digite <b>FECHA DE FACTURA</b>");
 			hasValidationError=true;
 		}
+		
+		if(!hasValidationError){}
+			if(!form.fechaFactura){
+				form.fechaFactura = '01/01/1900';
+			}else{
+				dd= form.fechaFactura.substring(0,2);
+				if(!isNaN(dd) && dd>31){
+					$("#errmsg").html("Formato de fecha invalido");
+					hasValidationError=true;
+				}
+				mm= form.fechaFactura.substring(3,5);
+				if(!isNaN(mm) && (mm<1 || mm>12)){
+					$("#errmsg").html("Formato de fecha invalido");
+					hasValidationError=true;
+				}
+				yy= form.fechaFactura.substring(6,10);
+				if(isNaN(dd) || isNaN(dd) || isNaN(dd)){
+					$("#errmsg").html("Formato de fecha invalido");
+					hasValidationError=true;
+				}
+			}
+	   }
 		
 		
 		return form;
