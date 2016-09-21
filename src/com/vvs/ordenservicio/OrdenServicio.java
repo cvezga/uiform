@@ -7,7 +7,7 @@ public class OrdenServicio {
 	private int telefono;
     private int fabricante;
     private int modelo;
-    private long serie; 
+    private String serie; 
     private String nombre; 
     private String email;  
     private int telefonoPersona;
@@ -21,7 +21,7 @@ public class OrdenServicio {
     private int garantia; 
     private int fabricanteTelefonoPrestado; 
     private int modeloTelefonoPrestado;  
-    private long serieTelefonoPrestado;
+    private String serieTelefonoPrestado;
     private String facturaONotaDeventa; 
     private Date fechaFactura; 
     private String imagenRegistroDanos;
@@ -39,11 +39,16 @@ public class OrdenServicio {
 	public void setFabricante(int fabricante) {
 		this.fabricante = fabricante;
 	}
-	
-	public long getSerie() {
+	public int getModelo() {
+		return modelo;
+	}
+	public void setModelo(int modelo) {
+		this.modelo = modelo;
+	}
+	public String getSerie() {
 		return serie;
 	}
-	public void setSerie(long serie) {
+	public void setSerie(String serie) {
 		this.serie = serie;
 	}
 	public String getNombre() {
@@ -124,10 +129,10 @@ public class OrdenServicio {
 	public void setModeloTelefonoPrestado(int modeloTelefonoPrestado) {
 		this.modeloTelefonoPrestado = modeloTelefonoPrestado;
 	}
-	public long getSerieTelefonoPrestado() {
+	public String getSerieTelefonoPrestado() {
 		return serieTelefonoPrestado;
 	}
-	public void setSerieTelefonoPrestado(long serieTelefonoPrestado) {
+	public void setSerieTelefonoPrestado(String serieTelefonoPrestado) {
 		this.serieTelefonoPrestado = serieTelefonoPrestado;
 	}
 	public String getFacturaONotaDeventa() {
@@ -148,21 +153,12 @@ public class OrdenServicio {
 	public void setImagenRegistroDanos(String imagenRegistroDanos) {
 		this.imagenRegistroDanos = imagenRegistroDanos;
 	}
-	public int getModelo() {
-		return modelo;
-	}
-	public void setModelo(int modelo) {
-		this.modelo = modelo;
-	}
 	public long getUsuario() {
 		return usuario;
 	}
 	public void setUsuario(long usuario) {
 		this.usuario = usuario;
 	}
-	
     
-    
-
 
 }

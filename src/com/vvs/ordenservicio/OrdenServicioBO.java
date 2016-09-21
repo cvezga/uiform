@@ -108,7 +108,7 @@ public class OrdenServicioBO implements BO {
 	}
 	
 	public Map<Long, String> getFallas() {
-		return dao.getFallas();
+		return dao.getFallasTipos();
 	}
 
 	public Map<Long, String> getGarantias() {

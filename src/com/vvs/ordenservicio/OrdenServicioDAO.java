@@ -7,9 +7,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OrdenServicioDAO {
@@ -58,7 +60,7 @@ public class OrdenServicioDAO {
 			map.put("codigo_fabricante_tel_pres", os.getFabricanteTelefonoPrestado());
 			map.put("codigo_modelo_tel_pres", os.getModeloTelefonoPrestado());
 		}
-		if(os.getSerieTelefonoPrestado()>0){
+		if(os.getSerieTelefonoPrestado()!=null && os.getSerieTelefonoPrestado().trim().length()>0 ){
 		   map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
 		}
 		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
@@ -129,6 +131,28 @@ public class OrdenServicioDAO {
 		return mapDao.getMap("log_fallas","codigo","desc_falla");
 	}
 
+	public Map<Long, String> getFallasTipos() {
+		Map<Long, String> map = new LinkedHashMap<Long, String>();
+		map.put(-1L, "-- Seleccione --");
+		String sql = "SELECT f.codigo, tf.desc_tipo_falla ' - ' || f.desc_falla as desc_falla,tf.desc_tipo_falla,f.desc_falla  from log_fallas f, log_tipo_falla tf ORDER BY tf.desc_tipo_falla,f.desc_tipo_falla";
+		
+		ConnectionHelper ch = DB.getConnectionHelper();
+		try {
+			ResultSet rs = ch.executeQuery(sql);
+			while (rs.next()) {
+				Long keyValue = rs.getLong(1);
+				String valueValue = rs.getString(2);
+				map.put(keyValue, valueValue);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			ch.closeAll();
+		}
+
+		return map;
+	}
 	public Map<Long, String> getGarantias() {
 		return mapDao.getMap("log_garantias_ejecu","codigo","descripcion");
 	}
