@@ -447,10 +447,13 @@ $.urlParam = function(name) {
 	}
 	
 	function getDetalleAccesorios(){
-		if(hasValidationError>0) return;
+		if(hasValidationError){
+			//alert('detalle no se agrego; hay error de validacion');
+			return;
+		}
 		detalles = [];
 		for(r=1; r<=rowCount; r++){
-			row = $('#accesorio-row-'+r).prop('value');
+			row = $('#accesorio-row-'+r);
 			if(row){
 				sel = $('#accesorio-'+r).prop('value');
 				des = $('#descripcion-accesorio-'+r).prop('value');
