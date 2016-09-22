@@ -3,9 +3,11 @@
 <head>
 <meta http-equiv="Content-Type"
 	content="text/html; charset=windows-1252">
+
 <link href="css/estilo-vvs.css" rel="stylesheet" type="text/css">
+<link href="css/eAGLXj9BKHT5DGkADcDXA__.css" rel="stylesheet" type="text/css">
 </style>
-<link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui.css">
+
 <title>Orden de Servicio</title>
 
 <!--  <link rel="stylesheet" href="/resources/demos/style.css">  -->
@@ -81,20 +83,20 @@ $( function() {
 				   onchange  =  v.attributes["onchange"];
 				   
 				   if(onchange){
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
+					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
 				   }else{
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
+					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
 					   
 				   }
 				   onchange="myFunction()";
 			   }else if(typeof(type) !== "undefined" && type != null && "textarea" == type.value){
-				   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\" ''></textarea></td></tr>");
+				   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\" ''></textarea></td></tr>");
 				  	   
 			   }else{
 				   if(type && type.value == 'numeric'){
-					   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
+					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
 				   }else{
-               		   table.append("<tr><td class=\"tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\" width=\"200px\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
+               		   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\" width=\"200px\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
 				   }
 			   }
 		   });
@@ -467,11 +469,9 @@ $( function() {
 </head>
 <body>
 
-
-	<h1>
-		REGISTRO DE ORDEN DE SERVICIO <img id="img-load" src="images/load.gif">
-	</h1>
-
+<h2>
+	<span xmlns="http://www.w3.org/1999/xhtml" id="lblTitulo">REGISTRO DE ORDEN DE SERVICIO</span>
+</h2>
 	<table id="table-form" border="1" cellpadding="5" cellspacing="0">
 	</table>
 
