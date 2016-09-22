@@ -28,6 +28,7 @@ public class OrdenServicio {
     private String imagenRegistroDanos;
     private long usuario;
     private String[] detalleAccesorios;
+	//private String image;
     
     
 	public int getTelefono() {

@@ -10,10 +10,10 @@
 
 <title>Orden de Servicio</title>
 
-<!--  <link rel="stylesheet" href="/resources/demos/style.css">  -->
 
-<script src="js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
-<script src="js/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+   <link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui.css">
+   <script src="js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+   <script src="js/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
@@ -31,9 +31,6 @@ $.urlParam = function(name) {
 	}
 }
 
-$( function() {
-   
-  } );
 
 	$(document).ready(function(e) {
 		table = $("#table-form");
@@ -80,7 +77,7 @@ $( function() {
 			       }else{
 			    	   options = "";
 			       }
-				   onchange  =  v.attributes["onchange"];
+				   onchange  =  v.attributes["on-change"];
 				   
 				   if(onchange){
 					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
@@ -233,6 +230,7 @@ $( function() {
 				facturaNota: valueOf('facturaNota'), 
 				fechaFactura: valueOf('fechaFactura'), 
 				detalleAccesorios: getDetalleAccesorios(),
+				//image: getImageData(),
 				usuario: $.urlParam('usuario')
 				
 		};
@@ -291,7 +289,7 @@ $( function() {
 		return true;
 	}
 	
-	function valueOf(fieldName, required){
+	function valueOf(fieldName, required, defaultValue){
 		
 		if(hasValidationError) return;
 		
@@ -310,6 +308,9 @@ $( function() {
             return false;
 		}
 		
+		if(!(value)){
+		   value = defaultValue;
+		}
 		return value;
 	}
 	
@@ -322,6 +323,7 @@ $( function() {
 	}
 	
 	function comboChange(combo, target, model){
+	   // alert('combo change'+combo+':'+target+':'+model);
 		$('#'+target+'-input').empty();
 		if(combo.value>-1){
 			options = getSubOptions(model, combo.value);
@@ -408,6 +410,12 @@ $( function() {
 	    xhr.send("imgData="+imageDataURL);*/
 	}
 	
+	function getImageData(){
+	  canvasServer = document.getElementById("myCanvas");
+	  imageDataURL = canvasServer.toDataURL('image/png');
+	  return imageDataURL;
+	}
+	
 	var rowCount=0;
 	function addAccesorios(){
 		
@@ -431,6 +439,7 @@ $( function() {
 	}
 	
 	function remove(id){
+	   // alert('remove');
 		$('#'+id).find('select').remove();
 		$('#'+id).find('input').remove();
 		$('#'+id).remove();
@@ -472,6 +481,8 @@ $( function() {
 <h2>
 	<span xmlns="http://www.w3.org/1999/xhtml" id="lblTitulo">REGISTRO DE ORDEN DE SERVICIO</span>
 </h2>
+
+	<!-- FORMULARIO ORDEN DE SERVICIO -->
 	<table id="table-form" border="1" cellpadding="5" cellspacing="0">
 	</table>
 
@@ -479,7 +490,7 @@ $( function() {
 		<div id="telefono" label="TELÉFONO" required="true" max-length="8"
 			type="numeric" />
 		<div id="fabricante" label="FABRICANTE" required="true" type="combo"
-			model="fabricantes" onchange="comboChange(this,'modelo','modelos')" />
+			model="fabricantes" on-change="comboChange(this,'modelo','modelos')" />
 		<div id="modelo" label="MODELO" required="true" type="combo" size="50" />
 		<div id="serie" label="# SERIE (IMEI)" required="true" min-length="15"
 			max-length="15" type="numeric" />
@@ -492,7 +503,7 @@ $( function() {
 			type="textarea" rows="4" cols="50" />
 		<div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"
 			required="true" type="combo" model="tieneFacturas"
-			onchange="comboChange(this,'garantia','garantias')" />
+			on-change="comboChange(this,'garantia','garantias')"  />
 		<div id="falla1" label="FALLA 1" required="true" type="combo"
 			model="fallas" />
 		<div id="falla2" label="FALLA 2" type="combo" model="fallas" />
@@ -503,7 +514,7 @@ $( function() {
 		<div id="garantia" label="GARANTÍA" required="true" type="combo" />
 		<div id="fabricanteTelefonoPrestado"
 			label="FABRICANTE TELÉFONO PRESTADO" type="combo" model="fabricantes"
-			onchange="comboChange(this,'modeloTelefonoPrestado','modelos')" />
+			on-change="comboChange(this,'modeloTelefonoPrestado','modelos')" />
 		<div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"
 			type="combo" />
 		<div id="serieTelefonoPrestado"
@@ -513,9 +524,12 @@ $( function() {
 		<div id="fechaFactura" label="FECHA DE FACTURA" min-length="10"
 			max-length="10" type="date" use-class="datepicker" />
 	</div>
+	
+	<!-- ERROR MESSAGE -->
 	<p id="errmsg" style="color: red;"></p>
 
 
+	<!-- ACCESORIOS -->
 	<table border="1" cellpadding="5" cellspacing="0">
 		<tr>
 			<th>Detalle</th>
@@ -528,19 +542,13 @@ $( function() {
 						<th>DESCRIPCION DEL ACCESORIO</th>
 						<th><img src="images/add.png" onclick="addAccesorios();"></th>
 					</tr>
-					<!-- 
-					<tr id="accesorio-row-1">
-						<td><select id="accesorio-1"></select></td>
-						<td><input  id="descripcion-accesorio-1"></td>
-						<td><img src="images/Delete.png" onclick="remove('accesorio-row-1');"></td>
-					</tr>
-					 -->
 				</table>
 			</td>
 		</tr>
 	</table>
 
 
+	<!-- REGISTRO DE DANOS -->
 	<table border="1" cellpadding="5" cellspacing="0">
 		<tr>
 			<th>REGISTRO DE DAÑOS</th>
@@ -553,7 +561,7 @@ $( function() {
 
 
 
-
+	<!-- GUARDAR E IMPRIMIR -->
 	<table width="100%">
 		<tr>
 			<th><button>Guardar e Imprimir</button></th>
@@ -561,7 +569,7 @@ $( function() {
 	</table>
 
 
-
+	<!-- IMAGE -->
 	<img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
 
 </body>

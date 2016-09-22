@@ -10,8 +10,14 @@ import com.cvezga.uiform.JsonUtil;
 public class OrdenServicioBO implements BO {
 
 	private static Map<String, String> modelCacheMap = new HashMap<String, String>();
-
+	
 	private OrdenServicioDAO dao = new OrdenServicioDAO();
+	
+	public OrdenServicioBO(){
+		
+		loadAllCache();
+		
+	}
 
 	@Override
 	public String process(Map<String, String> data) {
@@ -85,6 +91,14 @@ public class OrdenServicioBO implements BO {
 		}
 
 		return null;
+	}
+	
+	public void loadAllCache(){
+		getModelData("fabricantes");
+		getModelData("fallas");
+		getModelData("garantias");
+		getModelData("tieneFacturas");
+		getModelData("accesorios");
 	}
 
 	private Map<Long, String> getTieneFacturas() {

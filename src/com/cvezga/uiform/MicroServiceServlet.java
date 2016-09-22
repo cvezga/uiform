@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.ehcache.Cache;
+import org.ehcache.CacheManager;
+
 /**
  * Servlet implementation class MicroServiceServlet
  */
@@ -40,6 +43,14 @@ public class MicroServiceServlet extends HttpServlet {
             }
 			
 		}
+		
+        /**
+		CacheManager manager = CacheManager.newInstance("src/config/ehcache1.xml");
+		Cache cache = manager.getCache("sampleCache1",String.class, String.class);
+		Element element = new Element("key1", "value1");
+        cache.put(element);
+        cache.put
+        **/
        super.init(config);
     }
 	/**
