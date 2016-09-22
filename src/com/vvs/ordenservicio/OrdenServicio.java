@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class OrdenServicio {
 	
+	private long orden;
 	private int telefono;
     private int fabricante;
     private int modelo;
@@ -22,10 +23,12 @@ public class OrdenServicio {
     private int fabricanteTelefonoPrestado; 
     private int modeloTelefonoPrestado;  
     private String serieTelefonoPrestado;
-    private String facturaONotaDeventa; 
+    private String facturaNota; 
     private Date fechaFactura; 
     private String imagenRegistroDanos;
     private long usuario;
+    private String[] detalleAccesorios;
+    
     
 	public int getTelefono() {
 		return telefono;
@@ -135,11 +138,11 @@ public class OrdenServicio {
 	public void setSerieTelefonoPrestado(String serieTelefonoPrestado) {
 		this.serieTelefonoPrestado = serieTelefonoPrestado;
 	}
-	public String getFacturaONotaDeventa() {
-		return facturaONotaDeventa;
+	public String getFacturaNota() {
+		return facturaNota;
 	}
-	public void setFacturaONotaDeventa(String facturaONotaDeventa) {
-		this.facturaONotaDeventa = facturaONotaDeventa;
+	public void setFacturaNota(String facturaNota) {
+		this.facturaNota = facturaNota;
 	}
 	public Date getFechaFactura() {
 		return fechaFactura;
@@ -159,6 +162,19 @@ public class OrdenServicio {
 	public void setUsuario(long usuario) {
 		this.usuario = usuario;
 	}
+	public String[] getDetalleAccesorios() {
+		return detalleAccesorios;
+	}
+	public void setDetalleAccesorios(String[] detalleAccesorios) {
+		this.detalleAccesorios = detalleAccesorios;
+	}
+	public long getOrden() {
+		return orden;
+	}
+	public void setOrden(long orden) {
+		this.orden = orden;
+	}
+	
     
-
+	
 }

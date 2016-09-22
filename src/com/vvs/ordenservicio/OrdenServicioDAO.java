@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class OrdenServicioDAO {
-	
+
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyMMdd");
 
 	private static MapDAO mapDao = new MapDAO();
@@ -27,15 +27,24 @@ public class OrdenServicioDAO {
 
 		bindMap.put("sssss", dataMap.get("aaaaa"));
 
-		String outcome = mapDao.insert("log_ordenservicio", "codigo", bindMap);
+		String outcome = mapDao.insert("log_orden_servicio", "codigo", bindMap);
 	}
 
-	public String save(OrdenServicio os)  {
+	public String save(OrdenServicio os) {
 
-		Map<String,Object> bindMap = getBindMap(os);
+		Map<String, Object> bindMap = getBindMap(os);
 
 		String outcome = mapDao.insert("log_orden_servicio", "codigo", bindMap);
 		
+		if(outcome.startsWith("success,")){
+			long orden = Long.parseLong(outcome.substring(8));
+			os.setOrden(orden);
+		}
+
+		if (os.getDetalleAccesorios() != null) {
+			saveDetalle(os);
+		}
+
 		return outcome;
 	}
 
@@ -51,104 +60,58 @@ public class OrdenServicioDAO {
 		map.put("direccion", os.getDireccion());
 		map.put("codigo_tiene_factura", os.getClienteTieneFactura());
 		map.put("codigo_falla_1", os.getFalla1());
-		if(os.getFalla2()>-1)
-		map.put("codigo_falla_2", os.getFalla2());
-		if(os.getFalla3()>-1)
-		map.put("codigo_falla_3", os.getFalla3());
-		if(os.getFalla4()>-1)
-		map.put("codigo_falla_4", os.getFalla4());
+		if (os.getFalla2() > -1)
+			map.put("codigo_falla_2", os.getFalla2());
+		if (os.getFalla3() > -1)
+			map.put("codigo_falla_3", os.getFalla3());
+		if (os.getFalla4() > -1)
+			map.put("codigo_falla_4", os.getFalla4());
 		map.put("comentario_ejecutivo", os.getComentario());
 		map.put("codigo_garantia", os.getGarantia());
-		if(os.getFabricanteTelefonoPrestado()>-1){
+		if (os.getFabricanteTelefonoPrestado() > -1) {
 			map.put("codigo_fabricante_tel_pres", os.getFabricanteTelefonoPrestado());
 			map.put("codigo_modelo_tel_pres", os.getModeloTelefonoPrestado());
 		}
-		if(os.getSerieTelefonoPrestado()!=null && os.getSerieTelefonoPrestado().trim().length()>0 ){
-		   map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
+		if (os.getSerieTelefonoPrestado() != null && os.getSerieTelefonoPrestado().trim().length() > 0) {
+			map.put("numero_serie_tel_prest", os.getSerieTelefonoPrestado());
 		}
-		map.put("factura_nota_venta", os.getFacturaONotaDeventa());
-		try{
-		if(os.getFechaFactura()!=null && "19000101".compareTo(sdf.format(os.getFechaFactura()))<0)
-		    map.put("fecha_factura", os.getFechaFactura());
-		}catch(Exception e){
+		map.put("factura_nota_venta", os.getFacturaNota());
+		try {
+			if (os.getFechaFactura() != null && "19000101".compareTo(sdf.format(os.getFechaFactura())) < 0)
+				map.put("fecha_factura", os.getFechaFactura());
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		map.put("fecha_modificacion", new Date());
 		map.put("usuario_modificacion", os.getUsuario());
-		//map.put("imagen_final", os.getTelefono());
-		/**
-		 * CREATE TABLE log_orden_servicio
-		 * 
-		 * codigo_tramite numeric(3,0) NOT NULL, codigo numeric(5,0) NOT NULL,
-		 * codigo_tienda numeric(4,0), telefono numeric(8,0), codigo_fabricante
-		 * numeric(2,0), codigo_modelo numeric(3,0), numero_serie numeric(15,0),
-		 * nombre_cliente character varying(150), email character varying(50),
-		 * telefono_personal numeric(8,0), direccion character varying(300),
-		 * codigo_tiene_factura numeric(1,0), codigo_falla_1 numeric(4,0),
-		 * codigo_falla_2 numeric(4,0), codigo_falla_3 numeric(4,0),
-		 * codigo_falla_4 numeric(4,0), comentario_ejecutivo character
-		 * varying(500), codigo_garantia numeric(2,0),
-		 * codigo_fabricante_tel_pres numeric(2,0), codigo_modelo_tel_pres
-		 * numeric(3,0), numero_serie_tel_pres numeric(15,0), factura_nota_venta
-		 * character varying(8), fecha_factura timestamp without time zone,
-		 * fecha_entrega timestamp without time zone, codigo_resuelto_en_sitio
-		 * numeric(1,0), codigo_garantia_interno numeric(2,0),
-		 * codigo_desicion_interno numeric(2,0),
-		 * codigo_garantia_desicion_interno numeric(2,0),
-		 * codigo_reparacion_interno numeric(2,0),
-		 * codigo_decision_reparacion_interno numeric(2,0),
-		 * codigo_garantia_decision_reparacion_interno numeric(2,0),
-		 * notas_interno character varying(500), numero_rma numeric(15,0),
-		 * codigo_garantia_externo numeric(2,0), codigo_desicion_externo
-		 * numeric(2,0), codigo_garantia_desicion_externo numeric(2,0),
-		 * codigo_reparacion_externo numeric(2,0),
-		 * codigo_decision_reparacion_externo numeric(2,0),
-		 * codigo_garantia_decision_reparacion_externo numeric(2,0),
-		 * notas_externo character varying(500), numero_serie_tel_devo
-		 * numeric(15,0), codigo_dependencia numeric(5,0), codigo_csa_destino
-		 * numeric(4,0), codigo_paso_actual numeric(3,0), paso_terminado
-		 * numeric(5,0), usuario_ingreso numeric(20,0), fecha_ingreso timestamp
-		 * without time zone, usuario_movimiento numeric(20,0), fecha_movimiento
-		 * timestamp without time zone, usuario_moificacion numeric(20,0),
-		 * fecha_modificacion timestamp without time zone,
-		 * recomendaciones_interno character varying(500),
-		 * recomendaciones_externo character varying(500), codigo_tipo_ciclo
-		 * numeric(2,0), imagen_final bytea, nombre_imagen_final character
-		 * varying(100), comprobante bytea, nombre_comprobante character
-		 * varying(100), registro_danos bytea, nombre_registro_danos character
-		 * varying(100), actualizar_externo numeric(1,0), ind_pintar_danos
-		 * numeric(5,0), metodologia_interno character varying(500),
-		 * metodologia_externo character varying(500), finalizado_cobro_marca
-		 * numeric(5,0), codigo_estado numeric(1,0),
-		 **/
-		return map;
+		// map.put("imagen_final", os.getTelefono());
+			return map;
 	}
-	
-	public Map<Long,String> getFabricantes(){
-		return mapDao.getMap("log_fabricante","codigo","desc_fabricante");
+
+	public Map<Long, String> getFabricantes() {
+		return mapDao.getMap("log_fabricante", "codigo", "desc_fabricante");
 	}
 
 	public Map<Long, String> getModelos(long codigoFabricante) {
-		return mapDao.getMap("log_modelos","codigo_fabricante",codigoFabricante, "codigo","desc_modelo");
+		return mapDao.getMap("log_modelos", "codigo_fabricante", codigoFabricante, "codigo", "desc_modelo");
 	}
 
 	public Map<Long, String> getGarantias(long tieneFactura) {
-		return mapDao.getMap("log_garantias_ejecu","codigo_con_factura",tieneFactura, "codigo","descripcion");
+		return mapDao.getMap("log_garantias_ejecu", "codigo_con_factura", tieneFactura, "codigo", "descripcion");
 	}
+
 	public Map<Long, String> getFallas() {
-		return mapDao.getMap("log_fallas","codigo","desc_falla");
+		return mapDao.getMap("log_fallas", "codigo", "desc_falla");
 	}
 
 	public Map<Long, String> getFallasTipos() {
 		Map<Long, String> map = new LinkedHashMap<Long, String>();
 		map.put(-1L, "-- Seleccione --");
-		
-		String sql 
-		= "SELECT f.codigo, tf.desc_tp_falla || ' - ' || f.desc_falla as desc_falla" 
-		+ " from log_fallas f, log_tipo_falla tf "
-		+ " WHERE f.codigo_tipo_falla = tf.codigo "
-		+ " ORDER BY tf.desc_tp_falla, f.desc_falla";
-		
+
+		String sql = "SELECT f.codigo, tf.desc_tp_falla || ' - ' || f.desc_falla as desc_falla"
+				+ " from log_fallas f, log_tipo_falla tf " + " WHERE f.codigo_tipo_falla = tf.codigo "
+				+ " ORDER BY tf.desc_tp_falla, f.desc_falla";
+
 		ConnectionHelper ch = DB.getConnectionHelper();
 		try {
 			ResultSet rs = ch.executeQuery(sql);
@@ -166,37 +129,35 @@ public class OrdenServicioDAO {
 
 		return map;
 	}
+
 	public Map<Long, String> getGarantias() {
-		return mapDao.getMap("log_garantias_ejecu","codigo","descripcion");
-	}
-	
-	public Map<Long, String> getAccesorios() {
-		return mapDao.getMap("log_accesorios","codigo","descripcion");
+		return mapDao.getMap("log_garantias_ejecu", "codigo", "descripcion");
 	}
 
-	
+	public Map<Long, String> getAccesorios() {
+		return mapDao.getMap("log_accesorios", "codigo", "descripcion");
+	}
+
 	public void saveImage(byte[] image, long id) {
 		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
 		ByteArrayInputStream bais = new ByteArrayInputStream(image);
 		System.out.println(image.length);
 		System.out.println(bais.available());
 		Connection con = DB.getConnection();
-		 
+
 		PreparedStatement ps = null;
 		try {
 			con.setAutoCommit(false);
 			ps = con.prepareStatement(sql);
-			//ps.setBinaryStream(1, bais, image.length);
+			// ps.setBinaryStream(1, bais, image.length);
 			ps.setBytes(1, image);
 			ps.setLong(2, id);
 			ps.executeUpdate();
-			 
-			
-			
+
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			try {
 				ps.close();
 			} catch (SQLException e) {
@@ -211,19 +172,17 @@ public class OrdenServicioDAO {
 				e.printStackTrace();
 			}
 		}
-		
-		
-		
+
 	}
 
 	public void saveImageToFile(byte[] image, long id) {
 		File dir = new File("/tmp/images");
-		if(!dir.exists()){
+		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		File f = new File(dir,"image-"+id+".png");
+		File f = new File(dir, "image-" + id + ".png");
 		try {
-			FileOutputStream fos = new  FileOutputStream(f);
+			FileOutputStream fos = new FileOutputStream(f);
 			fos.write(image, 0, image.length);
 			fos.flush();
 			fos.close();
@@ -234,13 +193,62 @@ public class OrdenServicioDAO {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+	
+
+	private void saveDetalle(OrdenServicio os) {
+		String sql = "INSERT INTO log_deta_orden_servi(codigo_orden_servicio,codigo_tramite_orden_servicio,consecutivo,codigo_accesorio,descripcin) "
+				+" VALUES(?,1,?,?,?);";
 		
+		Connection con = DB.getConnection();
 		
+		PreparedStatement ps=null;
+		try {
+			con.setAutoCommit(false);
+			ps = con.prepareStatement(sql);
+			for(int i=0; i<os.getDetalleAccesorios().length; i=i+2){
+				
+				
+				ps.clearParameters();
+				
+				ps.setInt(1, (int)os.getOrden());
+				ps.setInt(2, (i+2)/2 );
+				ps.setInt(3, Integer.parseInt(os.getDetalleAccesorios()[i]));
+				ps.setString(4, os.getDetalleAccesorios()[i+1]);
+				
+				ps.addBatch();
+				
+			}
+			
+			ps.executeBatch();
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+		}finally{
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				con.commit();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				con.close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		
 		
 	}
-
-	
 
 }

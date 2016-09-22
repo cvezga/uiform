@@ -1,19 +1,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
-<link href="css/estilo-vvs.css" rel="stylesheet" type="text/css"></style>
-<title>Orden de Servicio</title>
+<meta http-equiv="Content-Type"
+	content="text/html; charset=windows-1252">
+<link href="css/estilo-vvs.css" rel="stylesheet" type="text/css">
+</style>
 <link rel="stylesheet" href="js/jquery-ui-1.12.1.custom/jquery-ui.css">
- <!--  <link rel="stylesheet" href="/resources/demos/style.css">  -->
+<title>Orden de Servicio</title>
 
- <script src="js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
- <script src="js/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+<!--  <link rel="stylesheet" href="/resources/demos/style.css">  -->
+
+<script src="js/jquery-ui-1.12.1.custom/external/jquery/jquery.js"></script>
+<script src="js/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
 
 
 <script type="text/javascript">
 var canvas,ctx;
 var hasValidationError = false;
+var marks = [];
 
 $.urlParam = function(name) {
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)')
@@ -130,17 +134,15 @@ $( function() {
 		  $(".numeric").keypress(function (e) {
 			     //if the letter is not digit then display error and don't type anything
 			     if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
-			        //display error message
-			        $("#errmsg").html("Digits Only").show().fadeOut("slow");
-			               return false;
+			            return false;
 			    }
-			   });
+		   });
 		  
 		  paintImage();
 		  
 		  $('#myCanvas').mousedown(function (e) {
 		        mousePressed = true;
-		        Draw(e.pageX - $(this).offset().left, e.pageY - $(this).offset().top, false);
+		        Draw(e.pageX - $(this).offset().left -5 , e.pageY - $(this).offset().top - 5, false);
 		    });
 		
 		  $( ".datepicker" ).datepicker({
@@ -226,8 +228,9 @@ $( function() {
 				fabricanteTelefonoPrestado: valueOf('fabricanteTelefonoPrestado',false,-1), 
 				modeloTelefonoPrestado: valueOf('modeloTelefonoPrestado',false,-1),  
 				serieTelefonoPrestado: valueOf('serieTelefonoPrestado'),
-				facturaONotaDeVenta: valueOf('facturaONotaDeVenta'), 
+				facturaNota: valueOf('facturaNota'), 
 				fechaFactura: valueOf('fechaFactura'), 
+				detalleAccesorios: getDetalleAccesorios(),
 				usuario: $.urlParam('usuario')
 				
 		};
@@ -245,7 +248,7 @@ $( function() {
 			$("#errmsg").html("Selectione <b>GARANTÍA</b>");
 			hasValidationError=true;
 		}else
-		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.facturaONotaDeVenta)){
+		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.facturaNota)){
 			$("#errmsg").html("Digite <b>FACTURA / NOTA DE VENTA</b>");
 			hasValidationError=true;
 		}else
@@ -281,7 +284,9 @@ $( function() {
 	}
 	
 	function isEmpty(value){
-		return value==null || !value || value.replace(/\s/g, '').length == 0;
+		//return value==null || !value || value.replace(/\s/g, '').length == 0;
+		if(value) return false;
+		return true;
 	}
 	
 	function valueOf(fieldName, required){
@@ -331,15 +336,54 @@ $( function() {
 	}
 	
 	function Draw(x, y) {
-	    
-        ctx.beginPath();
-        ctx.strokeStyle = 'red';
-        ctx.lineWidth = 2;
-        ctx.lineJoin = "round";
-        ctx.rect(x, y, 10, 10);
-        ctx.closePath();
-        ctx.stroke();
+	   
+		if(!removeMark(x,y)){
+		
+			 drawRect(x,y);
+        
+        	 marks.push([x,y]);
+        
+		}
 	  
+	}
+	
+	function drawRect(x,y){
+		    ctx.beginPath();
+	        ctx.strokeStyle = 'red';
+	        ctx.lineWidth = 2;
+	        ctx.lineJoin = "round";
+	        ctx.rect(x, y, 10, 10);
+	        ctx.closePath();
+	        ctx.stroke();
+	}
+	
+	function removeMark(x,y){
+	    removed = false;
+		
+	    for(i=(marks.length-1); i>=0; i--){
+			xx = marks[i][0];
+			yy = marks[i][1];
+			if( ( x >= xx-5 && x <= xx+10-5 ) && ( y >= yy-5 && y <= yy+10-5 ) ){
+				marks.splice(i,1);
+				redraw();
+				removed = true;
+				break;
+			}
+		}
+		
+		return removed;
+		
+	}
+	
+	function redraw(){
+		paintImage();
+		for(i=0; i<marks.length; i++){
+			xx = marks[i][0];
+			yy = marks[i][1];
+		 
+			drawRect(xx,yy);
+		}
+		
 	}
 	
 	function uploadImage(newId) {
@@ -362,15 +406,15 @@ $( function() {
 	    xhr.send("imgData="+imageDataURL);*/
 	}
 	
-	var rowCount=1;
+	var rowCount=0;
 	function addAccesorios(){
 		
 		options = getOptions('accesorios');
 		
 		 
-		 newTR = '<tr id="accesorio-row-%row%">'
+		 newTR = '<tr id="accesorio-row-%row%" class="detalleRow">'
 			+'<td><select id="accesorio-%row%">'+options+'</select></td>'
-			+'<td><input  id="descripcion-accesorio-%row%"></td>'
+			+'<td><input  id="descripcion-accesorio-%row%" size="50" maxlength="150"></td>'
 			+'<td><img src="images/Delete.png" onclick="remove(\'accesorio-row-%row%\');"></td>'
 		    +'</tr>';
 		    
@@ -385,45 +429,94 @@ $( function() {
 	}
 	
 	function remove(id){
-		$('#'+id).empty();
+		$('#'+id).find('select').remove();
+		$('#'+id).find('input').remove();
+		$('#'+id).remove();
 		//rowCount--;
+	}
+	
+	function getDetalleAccesorios(){
+		if(hasValidationError>0) return;
+		detalles = [];
+		for(r=1; r<=rowCount; r++){
+			row = $('#accesorio-row-'+r).prop('value');
+			if(row){
+				sel = $('#accesorio-'+r).prop('value');
+				des = $('#descripcion-accesorio-'+r).prop('value');
+				if( sel && des ){
+					detalles.push(sel);
+					detalles.push(des);
+				}else if(sel==-1){
+					showError('Seleccione el accesorio en la linea de detalla No. '+r);
+				}else if(isEmpty(des)){
+					showError('Describa el accesorio seleccionado en la linea de detalle No. '+r);
+				}
+			}
+		}
+		 
+		return detalles;
+		
+	}
+	
+	function showError(msg){
+		$("#errmsg").html(msg);
+		hasValidationError=true;
+        return false;
 	}
 </script>
 </head>
 <body>
 
 
-      <h1>REGISTRO DE ORDEN DE SERVICIO <img id="img-load" src="images/load.gif"></h1>
-     
-      <table id="table-form" border="1" cellpadding="5" cellspacing="0">
-      </table>
-       
-      <div id="field-list">
-          <div id="telefono" label="TELÉFONO" required="true" max-length="8" type="numeric" />
-	      <div id="fabricante" label="FABRICANTE"  required="true" type="combo" model="fabricantes" onchange="comboChange(this,'modelo','modelos')" />
-	      <div id="modelo" label="MODELO"  required="true" type="combo" size="50"/>
-	      <div id="serie" label="# SERIE (IMEI)"  required="true" min-length="15" max-length="15" type="numeric"/> 
-	      <div id="nombre" label="NOMBRE / APELLIDO"  required="true" max-length="150" size="50"/> 
-	      <div id="email" label="EMAIL" max-length="50" type="email" />  
-	      <div id="telefonoPersona" label="TELÉFONO PERSONAL"  required="true"  max-length="8" type="numeric" />
-	      <div id="direccion" label="DIRECCIÓN"  required="true" max-length="300" type="textarea" rows="4" cols="50"/> 
-	      <div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"  required="true" type="combo" model="tieneFacturas" onchange="comboChange(this,'garantia','garantias')" /> 
-	      <div id="falla1" label="FALLA 1"  required="true" type="combo" model="fallas" /> 
-	      <div id="falla2" label="FALLA 2"  type="combo" model="fallas" />  
-	      <div id="falla3" label="FALLA 3"  type="combo" model="fallas" />  
-	      <div id="falla4" label="FALLA 4"  type="combo" model="fallas" />  
-	      <div id="comentario" label="COMENTARIO"  required="true" max-length="300" type="textarea" rows="4" cols="50" /> 
-	      <div id="garantia" label="GARANTÍA"  required="true" type="combo"  /> 
-	      <div id="fabricanteTelefonoPrestado" label="FABRICANTE TELÉFONO PRESTADO"  type="combo" model="fabricantes" onchange="comboChange(this,'modeloTelefonoPrestado','modelos')" /> 
-	      <div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"  type="combo"  />  
-	      <div id="serieTelefonoPrestado" label="# SERIE (IMEI) TELÉFONO PRESTADO"  type="numeric" min-length="15" max-length="15"/>
-	      <div id="facturaONotaDeVenta" label="FACTURA / NOTA DE VENTA" max-length="8"  /> 
-	      <div id="fechaFactura" label="FECHA DE FACTURA" min-length="10" max-length="10" type="date" use-class="datepicker"/> 
-      </div>
-       <p id="errmsg" style="color:red;"></p>
-   
+	<h1>
+		REGISTRO DE ORDEN DE SERVICIO <img id="img-load" src="images/load.gif">
+	</h1>
 
-	<table  border="1" cellpadding="5" cellspacing="0">
+	<table id="table-form" border="1" cellpadding="5" cellspacing="0">
+	</table>
+
+	<div id="field-list">
+		<div id="telefono" label="TELÉFONO" required="true" max-length="8"
+			type="numeric" />
+		<div id="fabricante" label="FABRICANTE" required="true" type="combo"
+			model="fabricantes" onchange="comboChange(this,'modelo','modelos')" />
+		<div id="modelo" label="MODELO" required="true" type="combo" size="50" />
+		<div id="serie" label="# SERIE (IMEI)" required="true" min-length="15"
+			max-length="15" type="numeric" />
+		<div id="nombre" label="NOMBRE / APELLIDO" required="true"
+			max-length="150" size="50" />
+		<div id="email" label="EMAIL" max-length="50" type="email" />
+		<div id="telefonoPersona" label="TELÉFONO PERSONAL" required="true"
+			max-length="8" type="numeric" />
+		<div id="direccion" label="DIRECCIÓN" required="true" max-length="300"
+			type="textarea" rows="4" cols="50" />
+		<div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"
+			required="true" type="combo" model="tieneFacturas"
+			onchange="comboChange(this,'garantia','garantias')" />
+		<div id="falla1" label="FALLA 1" required="true" type="combo"
+			model="fallas" />
+		<div id="falla2" label="FALLA 2" type="combo" model="fallas" />
+		<div id="falla3" label="FALLA 3" type="combo" model="fallas" />
+		<div id="falla4" label="FALLA 4" type="combo" model="fallas" />
+		<div id="comentario" label="COMENTARIO" required="true"
+			max-length="300" type="textarea" rows="4" cols="50" />
+		<div id="garantia" label="GARANTÍA" required="true" type="combo" />
+		<div id="fabricanteTelefonoPrestado"
+			label="FABRICANTE TELÉFONO PRESTADO" type="combo" model="fabricantes"
+			onchange="comboChange(this,'modeloTelefonoPrestado','modelos')" />
+		<div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"
+			type="combo" />
+		<div id="serieTelefonoPrestado"
+			label="# SERIE (IMEI) TELÉFONO PRESTADO" type="numeric"
+			min-length="15" max-length="15" />
+		<div id="facturaNota" label="FACTURA / NOTA DE VENTA" max-length="8" />
+		<div id="fechaFactura" label="FECHA DE FACTURA" min-length="10"
+			max-length="10" type="date" use-class="datepicker" />
+	</div>
+	<p id="errmsg" style="color: red;"></p>
+
+
+	<table border="1" cellpadding="5" cellspacing="0">
 		<tr>
 			<th>Detalle</th>
 		</tr>
@@ -462,12 +555,14 @@ $( function() {
 
 
 	<table width="100%">
-	<tr><th><button >Guardar e Imprimir</button></th></tr>
+		<tr>
+			<th><button>Guardar e Imprimir</button></th>
+		</tr>
 	</table>
-	
-      
-       
-       <img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
-       
-   </body>
+
+
+
+	<img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
+
+</body>
 </html>
