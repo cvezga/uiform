@@ -64,7 +64,7 @@ public class GenerarReporteServlet extends HttpServlet {
         String rutaLogo = proto+host+":"+port+base+ "/images/logo.png";
         parametrosReporte.put("LOGO",rutaLogo);
         parametrosReporte.put("NOMBRE_LOGO","Movistar");
-        parametrosReporte.put("CONTEXTO",request.getServletContext());
+        //parametrosReporte.put("CONTEXTO",request.getServletContext());
 	
 		response.setContentType("application/pdf");
 		response.setHeader("Content-disposition","inline; filename='OrdedServicio-"+id+".pdf'");
