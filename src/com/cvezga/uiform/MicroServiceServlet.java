@@ -12,8 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.ehcache.Cache;
-import org.ehcache.CacheManager;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Element;
 
 /**
  * Servlet implementation class MicroServiceServlet
@@ -24,6 +25,8 @@ public class MicroServiceServlet extends HttpServlet {
 	private static Map<String,String> paramMap = new HashMap<String,String>();
 	private static Map<String,BO> requestHandlerMap = new HashMap<String,BO>();
 	private static long CACHE_TIME = 5 * 60 * 1000; //5 Minutos
+	
+	//private static Cache cache;
     /**
      * Default constructor. 
      */
@@ -33,6 +36,7 @@ public class MicroServiceServlet extends HttpServlet {
 
     @Override
     public void init(ServletConfig config) throws ServletException {
+    	 super.init(config);
         Enumeration<String> param = config.getInitParameterNames();
         while(param.hasMoreElements()){
         	String pname = param.nextElement();
@@ -44,19 +48,28 @@ public class MicroServiceServlet extends HttpServlet {
 			
 		}
 		
-        /**
-		CacheManager manager = CacheManager.newInstance("src/config/ehcache1.xml");
-		Cache cache = manager.getCache("sampleCache1",String.class, String.class);
-		Element element = new Element("key1", "value1");
-        cache.put(element);
-        cache.put
-        **/
-       super.init(config);
+        //String ecfile = getServletContext().getRealPath("WEB-INF/ehcache.xml");
+		//CacheManager manager = CacheManager.newInstance(ecfile);
+		//cache = manager.getCache("OrdenServicio");
+		 
+        
+        
+      
     }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		/**
+		String uri = request.getRequestURI();
+		Element element = cache.get(uri);
+		if (element != null) {
+			String outcome = (String) element.getObjectValue();
+			System.out.println("from cache:"+outcome);
+			byte[] utf8JsonString = outcome.getBytes("UTF8");
+			response.getOutputStream().write(utf8JsonString);
+		}**/
+		
 		BO bo = getBO(request.getRequestURI());
 		String outcome = "";
 		if(bo!=null){
@@ -69,19 +82,22 @@ public class MicroServiceServlet extends HttpServlet {
 		
 		}
 		
-		 long expiry = System.currentTimeMillis() + CACHE_TIME;
+		long expiry = System.currentTimeMillis() + CACHE_TIME;
 
-		    HttpServletResponse httpResponse = (HttpServletResponse)response;
-		    httpResponse.setDateHeader("Expires", expiry);
-		    httpResponse.setHeader("Cache-Control", "max-age="+ CACHE_TIME / 1000);
-		    
-		    /**
-		    String jsonString = new Gson().toJson(objectToEncode);
-		    byte[] utf8JsonString = jsonString.getBytes("UTF8");
-		    responseToClient.write(utf8JsonString, 0, utf8JsonString.Length);
-		    **/
-		    byte[] utf8JsonString = outcome.getBytes("UTF8");
-		response.getOutputStream().write(utf8JsonString); 
+		HttpServletResponse httpResponse = (HttpServletResponse) response;
+		httpResponse.setDateHeader("Expires", expiry);
+		httpResponse.setHeader("Cache-Control", "max-age=" + CACHE_TIME / 1000);
+
+		/**
+		 * String jsonString = new Gson().toJson(objectToEncode); byte[]
+		 * utf8JsonString = jsonString.getBytes("UTF8");
+		 * responseToClient.write(utf8JsonString, 0, utf8JsonString.Length);
+		 **/
+
+		//cache.put(new Element(uri, outcome));
+		byte[] utf8JsonString = outcome.getBytes("UTF8");
+
+		response.getOutputStream().write(utf8JsonString);
 	}
 
 	/**

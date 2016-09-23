@@ -42,7 +42,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>GenerarReporteServlet</servlet-name>
-		<url-pattern>/GenerarReporteServlet</url-pattern>
+		<url-pattern>/reporte</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>

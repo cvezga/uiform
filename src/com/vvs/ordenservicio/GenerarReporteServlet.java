@@ -1,11 +1,21 @@
 package com.vvs.ordenservicio;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperRunManager;
 
 /**
  * Servlet implementation class GenerarReporteServlet
@@ -27,19 +37,48 @@ public class GenerarReporteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		
+		String ordenId = request.getParameter("orden");
+		
+		Integer id = Integer.parseInt(ordenId);
+		
+        String reportPath = getServletContext().getRealPath("WEB-INF/jr/orden.jasper");
+		
+		InputStream inputStream = new FileInputStream(new File(reportPath));
+		HashMap<String, Object> parametrosReporte = new HashMap<String, Object>();
+		parametrosReporte.put("ORDEN_SERVICIO", id);
+		Connection connection = DB.getConnection();
+		parametrosReporte.put("REPORT_CONNECTION", connection);
+		
+		response.setContentType("application/pdf");
+		response.setHeader("Content-disposition","inline; filename='OrdedServicio-"+id+".pdf'");
+		
+		 
+		try {
+			JasperRunManager.runReportToPdfStream(inputStream, response.getOutputStream(), parametrosReporte, connection);
+		} catch (JRException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		response.getOutputStream().flush();
+		response.getOutputStream().close();
+		 
+		
+		
+
+		
+
+		
+		try {
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
+	
 /**
 	private void generarReporte(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String nombreArchivo = this.reporte.getNombreReal();

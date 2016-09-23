@@ -17,9 +17,11 @@
 
 
 <script type="text/javascript">
+ 
 var canvas,ctx;
 var hasValidationError = false;
 var marks = [];
+var seCreoLaOden = false;
 
 $.urlParam = function(name) {
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)')
@@ -111,6 +113,8 @@ $.urlParam = function(name) {
 			        },
 			        function(data,status){
 			        	//alert($.urlParam('usuario'));
+			        	seCreoLaOden = false;
+			        	newId = null;
 			        	if(!data.startsWith("success")){
 			        		$("#errmsg").html(data);
 				               return false;
@@ -119,10 +123,13 @@ $.urlParam = function(name) {
 			        		newId = data.substring(idx1+1);
 			        		uploadImage(newId);
  				            alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
+ 				           
+			        		seCreoLaOden=true;
 			        	}
 			        	
 			           if(data.startsWith("success") && "success" == status){
-			        	   location.reload();
+			        	   getPdf(newId);
+			        	   //location.reload();
 			           }
 			        });
 		    	}
@@ -154,6 +161,11 @@ $.urlParam = function(name) {
 		  
 		  $('#img-load').hide();
 	});
+	
+	function getPdf(id){
+		//window.location.href = "reporte?orden="+id;
+		$(location).attr('href', 'reporte?orden='+id)
+	}
 	
 	function getOptions(modelName){
 		options = '';
