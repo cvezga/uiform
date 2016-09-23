@@ -253,20 +253,28 @@ $.urlParam = function(name) {
 		
 		
 		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
-			$("#errmsg").html("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
-			hasValidationError=true;
+			showError("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
+		}else
+		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && isEmpty(form.serieTelefonoPrestado) ){
+			showError("Digite <b># SERIE (IMEI) TELÉFONO PRESTADO</b>");
+		}else
+		if(!hasValidationError && form.fabricanteTelefonoPrestado==-1 && !isEmpty(form.serieTelefonoPrestado) ){
+			showError("Seleccione FABRICANTE TELÉFONO PRESTADO: [SI]; o remueva la serie en <b># SERIE (IMEI) TELÉFONO PRESTADO</b>");
 		}else
 		if(!hasValidationError && form.clienteTieneFactura>-1 && form.garantia==-1){
-			$("#errmsg").html("Selectione <b>GARANTÍA</b>");
-			hasValidationError=true;
+			showError("Seleccione <b>GARANTÍA</b>");
 		}else
 		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.facturaNota)){
-			$("#errmsg").html("Digite <b>FACTURA / NOTA DE VENTA</b>");
-			hasValidationError=true;
+			showError("Digite <b>FACTURA / NOTA DE VENTA</b>");
 		}else
 		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.fechaFactura)){
-			$("#errmsg").html("Digite <b>FECHA DE FACTURA</b>");
-			hasValidationError=true;
+			showError("Digite <b>FECHA DE FACTURA</b>");
+		}else
+		if(!hasValidationError && form.clienteTieneFactura==0 && !isEmpty(form.facturaNota)){
+			showError("Selecciono Cliente <b>NO</b> tiene factura y digito en <b>FACTURA / NOTA DE VENTA</b>");
+		}else
+		if(!hasValidationError && form.clienteTieneFactura==0 && !isEmpty(form.fechaFactura)){
+			showError("Selecciono Cliente <b>NO</b> tiene factura y digito en <b>FECHA DE FACTURA</b>");
 		}
 		
 		if(!hasValidationError){
@@ -275,29 +283,25 @@ $.urlParam = function(name) {
 			}else{
 				dd= form.fechaFactura.substring(0,2);
 				if(!isNaN(dd) && dd>31){
-					$("#errmsg").html("Formato de fecha invalido");
-					hasValidationError=true;
+					showError("Formato de fecha invalido");
 				}
 				mm= form.fechaFactura.substring(3,5);
 				if(!isNaN(mm) && (mm<1 || mm>12)){
-					$("#errmsg").html("Formato de fecha invalido");
-					hasValidationError=true;
+					showError("Formato de fecha invalido");
 				}
 				yy= form.fechaFactura.substring(6,10);
 				if(isNaN(dd) || isNaN(dd) || isNaN(dd)){
-					$("#errmsg").html("Formato de fecha invalido");
-					hasValidationError=true;
+					showError("Formato de fecha invalido");
 				}
 			}
 	   }
-		
 		
 		return form;
 	}
 	
 	function isEmpty(value){
-		//return value==null || !value || value.replace(/\s/g, '').length == 0;
-		if(value) return false;
+		return value==null || !value || value.replace(/\s/g, '').length == 0;
+		//if(value) return false;
 		return true;
 	}
 	
