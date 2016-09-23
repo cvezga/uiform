@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GB_FAC_FACTURAS_EMITIDAS"  pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GB_FAC_FACTURAS_EMITIDAS" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="144"/>
 	<property name="ireport.layers" value="##Mon Oct 03 14:56:48 CST 2011\nlayer.1.name=Layer 1\nlayer.1.visible=true\nlayer.1.id=1\nlayer.0.name=Background\nlayer.0.visible=true\nlayer.0.id=0"/>
 	<parameter name="ORDEN_SERVICIO" class="java.lang.Integer"/>
 	<queryString>
-		<![CDATA[select os.codigo, os.fecha_ingreso, os.numero_serie, os,numero_serie_tel_pres, os.comentario_ejecutivo, os.telefono, os.nombre_cliente, os.direccion, os.email, os.telefono_personal, os.fecha_entrega, os.imagen_final, os.codigo_tiene_factura, os.factura_nota_venta, os.fecha_factura,
+		<![CDATA[select os.codigo, os.fecha_ingreso, os.numero_serie_tel, os.numero_serie_tel_prest, os.comentario_ejecutivo, os.telefono, os.nombre_cliente, os.direccion, os.email, os.telefono_personal, os.fecha_entrega, os.imagen_final, os.codigo_tiene_factura, os.factura_nota_venta, os.fecha_factura,
 (select string_agg(a.descripcion,' / ') from log_accesorios a where a.codigo in (select dos.codigo_accesorio from log_deta_orden_servi dos where dos.codigo_orden_servicio = os.codigo)) as accesorios,
 (select orig.desc_tienda from log_tiendas orig where orig.codigo = os.codigo_tienda) as tienda_origen,
 (select fa.desc_falla from log_fallas fa where fa.codigo = os.codigo_falla_1) as fallas,
@@ -21,9 +21,8 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	</queryString>
 	<field name="codigo" class="java.math.BigDecimal"/>
 	<field name="fecha_ingreso" class="java.sql.Timestamp"/>
-	<field name="numero_serie" class="java.math.BigDecimal"/>
-	<field name="os" class="java.lang.Object"/>
-	<field name="numero_serie_tel_pres" class="java.math.BigDecimal"/>
+	<field name="numero_serie_tel" class="java.lang.String"/>
+	<field name="numero_serie_tel_prest" class="java.lang.String"/>
 	<field name="comentario_ejecutivo" class="java.lang.String"/>
 	<field name="telefono" class="java.math.BigDecimal"/>
 	<field name="nombre_cliente" class="java.lang.String"/>
@@ -67,7 +66,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[Sistema de LogÃ­stica Inversa y Servicio TÃ©cnico]]></text>
+				<text><![CDATA[Sistema de Logística Inversa y Servicio Técnico]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -151,7 +150,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[GarantÃ­a Inicial:]]></text>
+				<text><![CDATA[Garantía Inicial:]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="31" width="555" height="1"/>
@@ -200,7 +199,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[DirecciÃ³n:]]></text>
+				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="0" y="223" width="36" height="15"/>
@@ -224,7 +223,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[TelÃ©fono Personal:]]></text>
+				<text><![CDATA[Teléfono Personal:]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="238" width="555" height="1"/>
@@ -246,7 +245,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[NÃºmero de Factura:]]></text>
+				<text><![CDATA[Número de Factura:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement stretchType="RelativeToTallestObject" x="356" y="239" width="93" height="20"/>
@@ -265,7 +264,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 			<componentElement>
 				<reportElement x="170" y="77" width="137" height="30"/>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
-					<jr:codeExpression><![CDATA[$F{numero_serie}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{numero_serie_tel}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
@@ -371,7 +370,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{fecha_entrega}]]></textFieldExpression>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_entrega}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement stretchType="RelativeToTallestObject" x="449" y="239" width="106" height="20"/>
@@ -393,9 +392,9 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{codigo_tiene_factura}.intValue() == 0)?"NO":
-($F{codigo_tiene_factura}.intValue() == 1)?"SÃ�":"N/A"]]></textFieldExpression>
+($F{codigo_tiene_factura}.intValue() == 1)?"SÍ":"N/A"]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="000000000000000" isBlankWhenNull="true">
 				<reportElement x="83" y="62" width="87" height="15"/>
 				<textElement>
 					<font size="9"/>
@@ -409,27 +408,27 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{fallas}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="000000000000000" isBlankWhenNull="true">
 				<reportElement x="201" y="62" width="160" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero_serie}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{numero_serie_tel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="278" y="163" width="121" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="278" y="163" width="124" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font fontName="Arial" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[IMEI Telefono Prestado:]]></text>
+				<text><![CDATA[IMEI Telefono Préstamo:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="399" y="163" width="156" height="15"/>
+			<textField pattern="000000000000000" isBlankWhenNull="true">
+				<reportElement x="402" y="163" width="153" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero_serie_tel_pres}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.Number"><![CDATA[$F{numero_serie_tel_prest}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -477,25 +476,25 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				<textElement textAlignment="Justified">
 					<font size="8"/>
 				</textElement>
-				<text><![CDATA[- La garantÃ­a de las unidades dependerÃ¡ de las clÃ¡usulas estipuladas por la casa matriz, estas pueden variar segÃºn la marca y el modelo asÃ­ como de la fecha de compra del terminal.
-- Su unidad pierde garantÃ­a inmediata bajo las siguientes condiciones:
+				<text><![CDATA[- La garantía de las unidades dependerá de las cláusulas estipuladas por la casa matriz, estas pueden variar según la marca y el modelo así como de la fecha de compra del terminal.
+- Su unidad pierde garantía inmediata bajo las siguientes condiciones:
 1. Golpes evidentes por maltrato o descuido.
-2. Rayones profundos que pueden producir daÃ±os internos.
-3. Rastros de humedad, moho o cualquier corrosiÃ³n producida por lÃ­quidos.
+2. Rayones profundos que pueden producir daños internos.
+3. Rastros de humedad, moho o cualquier corrosión producida por líquidos.
 4. Alteraciones en etiquetas o ilegibilidad de las mismas.
-5. AlteraciÃ³n en software.
-6. ManipulaciÃ³n tÃ©cnica de terceros no autorizados.
+5. Alteración en software.
+6. Manipulación técnica de terceros no autorizados.
 7. Exceso de polvo, tierra o cualquier suciedad que pudiese ser introducida intencional o no intencional a la unidad.
-8. DaÃ±os internos producidos por insectos o cualquier Animal que se pueda detectar.
-Nuestros tÃ©cnicos pueden evaluar o rechazar cualquier garantÃ­a si no cumple con las condiciones antes mencionadas.
-Si usted ingresa su terminal mÃ³vil fuera de garantÃ­a (mojada, golpeada, intervenido por terceras personas, con software no autorizado o que no corresponda al homologado por SUTEL,
-o con algÃºn desperfecto no causado por fabricaciÃ³n) declara que exonera de cualquier responsabilidad a TELEFÃ“NICA DE COSTA RICA TC, S.A y sus subsidiarias en caso que el dispositivo quede inutilizable por la gravedad del daÃ±o en que lo ingresa.
-El proceso de revisiÃ³n serÃ¡ exclusivamente de valoraciÃ³n del daÃ±o y en caso de proceder la reparaciÃ³n el cliente ACEPTA los cargos que esto represente con previa autorizaciÃ³n del mismo.
-El CLIENTE debe retirar el terminal una vez notificado de que puede hacer el retiro del mismo. Por este medio el CLIENTE autoriza al departamento tÃ©cnico a almacenar el terminal por un periodo de hasta 60 dÃ­as; sin embargo, el cliente asumirÃ¡ los costos de almacenaje, almacenamiento y des almacenaje del terminal, dicho costo es de $ 2.00 por mes.
-Cumplidos los 60 dÃ­as de almacenamiento el cliente autoriza a TELEFÃ“NICA DE COSTA RICA TC, S.A. a que se deshaga del terminal almacenado sin que medie reembolso alguno hacia el CLIENTE, cargando a la cuenta del CLIENTE el monto del costo de almacenamiento del terminal asÃ­ como los cargos administrativos del mismo.
-Si el Cliente no puede retirar el equipo por causa fortuita o fuerza mayor deberÃ¡ comunicarlo y demostrarlo al punto de venta donde dejo su terminal, antes del cumplimiento del perÃ­odo de 60 dÃ­as.
-TelefÃ³nica no se hace responsable por perdida de informaciÃ³n como fotos, mÃºsica, videos, contactos, etc. Por lo que el cliente deberÃ¡ realizar los respaldos de la informaciÃ³n que sean necesarios para garantizar la seguridad de su informaciÃ³n.
-El cliente declara que la informaciÃ³n contemplada en la presente orden de servicio es verdadera, que se le ha informado sobre los alcances de la garantÃ­a y sobre las causales de anulaciÃ³n de la misma, asÃ­ como los tiempos de respuesta del taller. ]]></text>
+8. Daños internos producidos por insectos o cualquier Animal que se pueda detectar.
+Nuestros técnicos pueden evaluar o rechazar cualquier garantía si no cumple con las condiciones antes mencionadas.
+Si usted ingresa su terminal móvil fuera de garantía (mojada, golpeada, intervenido por terceras personas, con software no autorizado o que no corresponda al homologado por SUTEL,
+o con algún desperfecto no causado por fabricación) declara que exonera de cualquier responsabilidad a TELEFÓNICA DE COSTA RICA TC, S.A y sus subsidiarias en caso que el dispositivo quede inutilizable por la gravedad del daño en que lo ingresa.
+El proceso de revisión será exclusivamente de valoración del daño y en caso de proceder la reparación el cliente ACEPTA los cargos que esto represente con previa autorización del mismo.
+El CLIENTE debe retirar el terminal una vez notificado de que puede hacer el retiro del mismo. Por este medio el CLIENTE autoriza al departamento técnico a almacenar el terminal por un periodo de hasta 60 días; sin embargo, el cliente asumirá los costos de almacenaje, almacenamiento y des almacenaje del terminal, dicho costo es de $ 2.00 por mes.
+Cumplidos los 60 días de almacenamiento el cliente autoriza a TELEFÓNICA DE COSTA RICA TC, S.A. a que se deshaga del terminal almacenado sin que medie reembolso alguno hacia el CLIENTE, cargando a la cuenta del CLIENTE el monto del costo de almacenamiento del terminal así como los cargos administrativos del mismo.
+Si el Cliente no puede retirar el equipo por causa fortuita o fuerza mayor deberá comunicarlo y demostrarlo al punto de venta donde dejo su terminal, antes del cumplimiento del período de 60 días.
+Telefónica no se hace responsable por perdida de información como fotos, música, videos, contactos, etc. Por lo que el cliente deberá realizar los respaldos de la información que sean necesarios para garantizar la seguridad de su información.
+El cliente declara que la información contemplada en la presente orden de servicio es verdadera, que se le ha informado sobre los alcances de la garantía y sobre las causales de anulación de la misma, así como los tiempos de respuesta del taller. ]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="1" y="313" width="277" height="27"/>
