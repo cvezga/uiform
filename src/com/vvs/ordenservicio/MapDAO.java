@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -32,6 +33,13 @@ public class MapDAO {
 			int idx=0;
 			for(Entry<String,Object> entry : dataMap.entrySet()){
 				idx++;
+				if("image".equals(entry.getKey())){
+					byte[] bImg64 = ((String)entry.getValue()).getBytes();
+					byte[] bImg = Base64.getDecoder().decode(bImg64);
+					 
+					ps.setBytes(idx, bImg);
+					
+				}else
 				if(entry.getValue() instanceof Date){
 					Date d = (Date) entry.getValue();
 					Timestamp ts = new Timestamp(d.getTime());

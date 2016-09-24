@@ -58,7 +58,7 @@ public class UploadImageServlet extends HttpServlet {
 			String xid = request.getParameter("id");
 			long lid = Long.parseLong(xid);
 
-			osBO.saveImage(bImg, lid);
+			//osBO.saveImage(bImg, lid);
 			/*
 			 * String imgData = req.getParameter("imgData"); String img64 =
 			 * imgData.replaceAll("data:image/png;base64,", ""); byte[]

@@ -126,7 +126,7 @@ $.urlParam = function(name) {
 			        	}else{
 			        		idx1 = data.indexOf(',');
 			        		newId = data.substring(idx1+1);
-			        		uploadImage(newId);
+			        		//uploadImage(newId);
  				            //alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
 			        		if(data.startsWith("success") && "success" == status){
 			        		       //getPdf(newId);
@@ -252,7 +252,7 @@ $.urlParam = function(name) {
 				facturaNota: valueOf('facturaNota'), 
 				fechaFactura: valueOf('fechaFactura'), 
 				detalleAccesorios: getDetalleAccesorios(),
-				//image: getImageData(),
+				image: getImageData(),
 				usuario: $.urlParam('usuario')
 				
 		};
@@ -408,6 +408,7 @@ $.urlParam = function(name) {
 		
 	}
 	
+	/**
 	function uploadImage(newId) {
 	    var canvasServer = document.getElementById("myCanvas");
 	    var context = canvasServer.getContext("2d");                    
@@ -424,9 +425,10 @@ $.urlParam = function(name) {
 	        imageDataURL + "\r\n" +
 	        "--" + boundary + "--\r\n";
 	    xhr.send(multipart);    
-	    /*xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-	    xhr.send("imgData="+imageDataURL);*/
+	    //xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	    //xhr.send("imgData="+imageDataURL);
 	}
+	**/
 	
 	function getImageData(){
 	  canvasServer = document.getElementById("myCanvas");
@@ -670,7 +672,7 @@ $.urlParam = function(name) {
  
  <div id="dialog-page-load" title="Cargando Pagina"   hidden>
   <p>
-    <div id="msg-confirmacion"><img src="images/load.gif"> Epere for vaor</div>
+    <div id="msg-confirmacion"><img src="images/load.gif"> Epere favor...</div>
   </p>
 </div>
 </body>

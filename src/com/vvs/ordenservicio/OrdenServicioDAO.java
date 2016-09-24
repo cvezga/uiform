@@ -138,6 +138,8 @@ public class OrdenServicioDAO {
 		return mapDao.getMap("log_accesorios", "codigo", "descripcion");
 	}
 
+	
+	/**
 	public void saveImage(byte[] image, long id) {
 		String sql = "UPDATE log_orden_servicio SET imagen_final=? WHERE codigo=?";
 		ByteArrayInputStream bais = new ByteArrayInputStream(image);
@@ -194,7 +196,7 @@ public class OrdenServicioDAO {
 			e.printStackTrace();
 		}
 
-	}
+	}**/
 	
 
 	private void saveDetalle(OrdenServicio os) {

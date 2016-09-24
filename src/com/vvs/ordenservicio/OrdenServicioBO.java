@@ -133,8 +133,9 @@ public class OrdenServicioBO implements BO {
 		return dao.getAccesorios();
 	}
 	
+	/**
 	public void saveImage(byte[] image, long id){
-		dao.saveImage(image,id);
-		dao.saveImageToFile(image, id);
-	}
+		//dao.saveImage(image,id);
+		//dao.saveImageToFile(image, id);
+	}**/
 }
