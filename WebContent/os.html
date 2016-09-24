@@ -6,7 +6,7 @@
 
 <link href="css/estilo-vvs.css" rel="stylesheet" type="text/css">
 <link href="css/eAGLXj9BKHT5DGkADcDXA__.css" rel="stylesheet" type="text/css">
-</style>
+
 
 <title>Orden de Servicio</title>
 
@@ -21,7 +21,7 @@
 var canvas,ctx;
 var hasValidationError = false;
 var marks = [];
-var seCreoLaOden = false;
+var seCreoLaOrden = false;
 
 $.urlParam = function(name) {
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)')
@@ -35,6 +35,10 @@ $.urlParam = function(name) {
 
 
 	$(document).ready(function(e) {
+		
+		dialogPageLoad();
+		
+		
 		table = $("#table-form");
 		fields =  $("#field-list");
 		
@@ -44,6 +48,7 @@ $.urlParam = function(name) {
 		   $('div', list).each(function(k,v) {
 			   id = v.attributes["id"];
 			   label =  v.attributes["label"]; 
+			   if(!label) return;
 			   type  =  v.attributes["type"];
 			   //--------------------
 			   required = v.attributes["required"];
@@ -102,7 +107,7 @@ $.urlParam = function(name) {
 		})
 
 		  $("button").click(function(){
-			    $('#img-load').show();
+			    
 			    $("#errmsg").empty();
 		    	var jsonform = getForm();
 		    	if(!hasValidationError){
@@ -113,27 +118,31 @@ $.urlParam = function(name) {
 			        },
 			        function(data,status){
 			        	//alert($.urlParam('usuario'));
-			        	seCreoLaOden = false;
+			        	seCreoLaOrden = false;
 			        	newId = null;
 			        	if(!data.startsWith("success")){
-			        		$("#errmsg").html(data);
+			        		showError$(data);
 				               return false;
 			        	}else{
 			        		idx1 = data.indexOf(',');
 			        		newId = data.substring(idx1+1);
 			        		uploadImage(newId);
- 				            alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
- 				           
-			        		seCreoLaOden=true;
+ 				            //alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
+			        		if(data.startsWith("success") && "success" == status){
+			        		       //getPdf(newId);
+                                //location.reload();
+                                seCreoLaOrden=true;
+		                    }     
+ 				            
+ 				           confirm(newId);
+			        		
 			        	}
 			        	
-			           if(data.startsWith("success") && "success" == status){
-			        	   getPdf(newId);
-			        	   //location.reload();
-			           }
+			           
 			        });
 		    	}
-		    	$('#img-load').hide();
+		    	 
+		    	 
 		    });
 		
 		
@@ -159,7 +168,7 @@ $.urlParam = function(name) {
 		      dateFormat: 'dd/mm/yy'
 		    });
 		  
-		  $('#img-load').hide();
+		  closeDialogPageLoad();
 	});
 	
 	function getPdf(id){
@@ -220,6 +229,7 @@ $.urlParam = function(name) {
 	
 	function getForm(){
 		hasValidationError = false;
+		$("#error-div").hide();
 		form = {
 				telefono: valueOf('telefono',true),
 				fabricante: valueOf('fabricante',true),
@@ -252,29 +262,23 @@ $.urlParam = function(name) {
 		}
 		
 		
-		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && form.modeloTelefonoPrestado == -1 ){
-			showError("Selectione <b>MODELO TELÉFONO PRESTADO</b>");
+		
+		if(!hasValidationError 
+				&& ((form.fabricanteTelefonoPrestado==-1 && (form.modeloTelefonoPrestado>-1 || !isEmpty(form.serieTelefonoPrestado)))
+				||  (form.fabricanteTelefonoPrestado== 1 && (form.modeloTelefonoPrestado==-1 || isEmpty(form.serieTelefonoPrestado)))
+						)		){
+			showError("DEBE COMPLETAR EL FABRICANTE, MODELO E IMEI PARA UN TELEFONO PRESTADO");
 		}else
-		if(!hasValidationError && form.fabricanteTelefonoPrestado>-1 && isEmpty(form.serieTelefonoPrestado) ){
-			showError("Digite <b># SERIE (IMEI) TELÉFONO PRESTADO</b>");
-		}else
-		if(!hasValidationError && form.fabricanteTelefonoPrestado==-1 && !isEmpty(form.serieTelefonoPrestado) ){
-			showError("Seleccione FABRICANTE TELÉFONO PRESTADO: [SI]; o remueva la serie en <b># SERIE (IMEI) TELÉFONO PRESTADO</b>");
-		}else
-		if(!hasValidationError && form.clienteTieneFactura>-1 && form.garantia==-1){
-			showError("Seleccione <b>GARANTÍA</b>");
+		if(!hasValidationError 
+				&& (form.clienteTieneFactura==-1 && (!isEmpty(form.facturaNota) || !isEpty(form.fechaFactura)))
+				){
+			showError("NUMERO DE FACTURA Y FECHA NO APLICAN PARA ESTE CASO");
 		}else
 		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.facturaNota)){
 			showError("Digite <b>FACTURA / NOTA DE VENTA</b>");
-		}else
+		}else	
 		if(!hasValidationError && form.clienteTieneFactura==1 && isEmpty(form.fechaFactura)){
 			showError("Digite <b>FECHA DE FACTURA</b>");
-		}else
-		if(!hasValidationError && form.clienteTieneFactura==0 && !isEmpty(form.facturaNota)){
-			showError("Selecciono Cliente <b>NO</b> tiene factura y digito en <b>FACTURA / NOTA DE VENTA</b>");
-		}else
-		if(!hasValidationError && form.clienteTieneFactura==0 && !isEmpty(form.fechaFactura)){
-			showError("Selecciono Cliente <b>NO</b> tiene factura y digito en <b>FECHA DE FACTURA</b>");
 		}
 		
 		if(!hasValidationError){
@@ -300,8 +304,8 @@ $.urlParam = function(name) {
 	}
 	
 	function isEmpty(value){
-		return value==null || !value || value.replace(/\s/g, '').length == 0;
-		//if(value) return false;
+		//return value==null || !value || value.replace(/\s/g, '').length == 0;
+		if(value) return false;
 		return true;
 	}
 	
@@ -311,16 +315,14 @@ $.urlParam = function(name) {
 		
 		value =   $('#'+fieldName+'-input').prop('value');
 		if(required && ( !value || value == -1 || value.replace(/\s/g, '').length == 0)){
-			$("#errmsg").html("El campo <b>"+$('#'+fieldName).attr('label')+"</b> es requerido");
-			hasValidationError=true;
+			showError("El campo <b>"+$('#'+fieldName).attr('label')+"</b> es requerido");
             return false;
 
 		}
 		
 		minlength= $('#'+fieldName).attr('min-length');
 		if(minlength && value.replace(/\s/g, '').length > 0 && value.replace(/\s/g, '').length < minlength){
-			$("#errmsg").html("El campo <b>"+$('#'+fieldName).attr('label')+"</b> debe tener "+minlength+" caracteres minimo");
-			hasValidationError=true;
+			showError("El campo <b>"+$('#'+fieldName).attr('label')+"</b> debe tener "+minlength+" caracteres minimo");
             return false;
 		}
 		
@@ -438,10 +440,10 @@ $.urlParam = function(name) {
 		options = getOptions('accesorios');
 		
 		 
-		 newTR = '<tr id="accesorio-row-%row%" class="detalleRow">'
-			+'<td><select id="accesorio-%row%">'+options+'</select></td>'
-			+'<td><input  id="descripcion-accesorio-%row%" size="50" maxlength="150"></td>'
-			+'<td><img src="images/Delete.png" onclick="remove(\'accesorio-row-%row%\');"></td>'
+		 newTR = '<tr id="tr-accesorio-row-%row%" class="detalleRow">'
+			+'<td><select id="select-accesorio-%row%">'+options+'</select></td>'
+			+'<td><input  id="input-descripcion-accesorio-%row%" size="50" maxlength="150"></td>'
+			+'<td><img src="images/Delete.png" onclick="removeRow(%row%);"></td>'
 		    +'</tr>';
 		    
 		 rowCount++;
@@ -454,11 +456,12 @@ $.urlParam = function(name) {
 		 
 	}
 	
-	function remove(id){
+	function removeRow(row){
 	   // alert('remove');
-		$('#'+id).find('select').remove();
-		$('#'+id).find('input').remove();
-		$('#'+id).remove();
+		$('#select-accesorio-'+row).remove();
+		$('#input-descripcion-accesorio-'+row).remove();;
+		$('#tr-accesorio-row-'+row).remove();
+		return false;
 		//rowCount--;
 	}
 	
@@ -489,10 +492,62 @@ $.urlParam = function(name) {
 	}
 	
 	function showError(msg){
-		$("#errmsg").html(msg);
+		$("#error-message").html(msg);
+		$("#error-div").show();
 		hasValidationError=true;
         return false;
 	}
+	
+	function confirm(ordenId){
+		
+		$('#msg-confirmacion').html("Se creo la Orden de Servicio No. "+ordenId);
+		$( "#dialog-message" ).dialog({
+		      modal: true,
+		      buttons: {
+		        Ok: function() {
+		          $( this ).dialog( "close" );
+		        }
+		      }
+		     ,
+		    
+		    close: function(event, ui){
+		      if(seCreoLaOrden){
+		    	  getPdf(ordenId);
+		      }
+		    }
+		});
+	
+	}
+	
+   function confirm(ordenId){
+        
+        $( "#dialog-message-pdf" ).dialog({
+              modal: true,
+              buttons: {
+                Ok: function() {
+                  $( this ).dialog( "close" );
+                }
+              }
+        });
+    
+    }
+   
+   function dialogPageLoad(){
+       
+       $( "#dialog-page-load").dialog(
+    		 {
+             modal: true
+             }
+       );
+   
+   }
+   
+   function closeDialogPageLoad(){
+	   $('.ui-dialog-titlebar-close').click();
+	   //$('#dialog-page-load').modal('toggle');
+	   //$('#dialog-page-load').find('.ui-dialog-titlebar-close').click(); //.trigger('click');
+   }
+   
 </script>
 </head>
 <body>
@@ -545,8 +600,16 @@ $.urlParam = function(name) {
 	</div>
 	
 	<!-- ERROR MESSAGE -->
-	<p id="errmsg" style="color: red;"></p>
-
+	
+<div class="ui-widget" id="error-div" hidden>
+    <div class="ui-state-error ui-corner-all" style="padding: 0 .7em; width: 600px;"> 
+        <p >
+            <span class="ui-icon ui-icon-alert" 
+                style="float: left; margin-right: .3em;"></span>
+           <span id="error-message"></span> 
+        </p>
+    </div>
+</div>
 
 	<!-- ACCESORIOS -->
 	<table border="1" cellpadding="5" cellspacing="0">
@@ -583,7 +646,7 @@ $.urlParam = function(name) {
 	<!-- GUARDAR E IMPRIMIR -->
 	<table width="100%">
 		<tr>
-			<th><button>Guardar e Imprimir</button></th>
+			<th><button class="CreadOrdenButton" id="CreadOrdenButton" style="width: 200px; height: 50px">Guardar e Imprimir</button></th>
 		</tr>
 	</table>
 
@@ -591,5 +654,24 @@ $.urlParam = function(name) {
 	<!-- IMAGE -->
 	<img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
 
+
+<div id="dialog-message" title="Orden Creada"   hidden>
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
+    <div id="msg-confirmacion"></div>
+  </p>
+ 
+</div>
+
+<div id="dialog-message-pdf" title="Orden Creada"   hidden>
+  <p>
+    <div id="msg-confirmacion"><img src="images/load.gif"> Generando PDF</div>
+  </p>
+ 
+ <div id="dialog-page-load" title="Cargando Pagina"   hidden>
+  <p>
+    <div id="msg-confirmacion"><img src="images/load.gif"> Epere for vaor</div>
+  </p>
+</div>
 </body>
 </html>
