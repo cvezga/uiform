@@ -88,9 +88,9 @@ $.urlParam = function(name) {
                    onchange  =  v.attributes["on-change"];
                    
                    if(onchange){
-                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
+                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input id='"+id.value+"-search-text' onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
                    }else{
-                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
+                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input id='"+id.value+"-search-text' onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
                        
                    }
                    onchange="myFunction()";
@@ -428,7 +428,12 @@ $.urlParam = function(name) {
 	
 	function comboChange(combo, target, model){
 	   // alert('combo change'+combo+':'+target+':'+model);
+	   searchComboOptions[target+'-input']=null;
 		$('#'+target+'-input').empty();
+		searchText = $('#'+target+'-search-text');
+		if(searchText){
+			searchText.val('');
+		}
 		if(combo.value>-1){
 			options = getSubOptions(model, combo.value, target+'-input');
 			$('#'+target+'-input').append(options);
