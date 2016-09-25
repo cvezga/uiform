@@ -39,12 +39,17 @@ public class OrdenServicioDAO {
 		if(outcome.startsWith("success,")){
 			long orden = Long.parseLong(outcome.substring(8));
 			os.setOrden(orden);
+			
+			if (os.getDetalleAccesorios() != null) {
+				String outcomeDetalle = saveDetalle(os);
+				if(outcomeDetalle.length()>0){
+					outcome=outcomeDetalle;
+				}
+			}
+
 		}
 
-		if (os.getDetalleAccesorios() != null) {
-			saveDetalle(os);
-		}
-
+		
 		return outcome;
 	}
 
@@ -199,7 +204,8 @@ public class OrdenServicioDAO {
 	}**/
 	
 
-	private void saveDetalle(OrdenServicio os) {
+	private String saveDetalle(OrdenServicio os) {
+		String outcome="";
 		String sql = "INSERT INTO log_deta_orden_servi(codigo_orden_servicio,codigo_tramite_orden_servicio,consecutivo,codigo_accesorio,descripcin) "
 				+" VALUES(?,1,?,?,?);";
 		
@@ -226,7 +232,7 @@ public class OrdenServicioDAO {
 			ps.executeBatch();
 			
 		} catch (SQLException e) {
-			
+			outcome=e.getMessage();
 			e.printStackTrace();
 		}finally{
 			try {
@@ -250,7 +256,7 @@ public class OrdenServicioDAO {
 		}
 		
 		
-		
+		return outcome;
 	}
 
 }

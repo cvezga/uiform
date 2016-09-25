@@ -65,9 +65,9 @@ $.urlParam = function(name) {
 			   }
 			   //--------------------
 			   size =  v.attributes["size"];
-			   xsize='';
+			   xsize=' style=" width:200px;" ';
 			   if(size){
-				   xsize=' size="'+size.value+'" ';
+				   xsize=' style=" width:'+size.value+'px;" ';
 			   }
 			   //--------------------
 			   useclass =  v.attributes["use-class"];
@@ -75,8 +75,6 @@ $.urlParam = function(name) {
 			   if(useclass){
 				   xclass=' class="'+useclass.value+'" ';
 			   }
-			   //--------------------
-			   xwidth = ' width=\"200px\"' ;
 			   if(typeof(type) !== "undefined" && type != null && "combo" == type.value){
 				   model  =  v.attributes["model"];
 				   if(model){
@@ -98,9 +96,9 @@ $.urlParam = function(name) {
 				  	   
 			   }else{
 				   if(type && type.value == 'numeric'){
-					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
+					   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input class=\"numeric\" id=\""+id.value+"-input\" "+xmaxlength+xsize+xclass+"></td></tr>");
 				   }else{
-               		   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\" width=\"200px\" "+xmaxlength+xsize+xwidth+xclass+"></td></tr>");
+               		   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><input id=\""+id.value+"-input\"  "+xmaxlength+xsize+xclass+"></td></tr>");
 				   }
 			   }
 		   });
@@ -573,7 +571,7 @@ $.urlParam = function(name) {
 		<div id="serie" label="# SERIE (IMEI)" required="true" min-length="15"
 			max-length="15" type="numeric" />
 		<div id="nombre" label="NOMBRE / APELLIDO" required="true"
-			max-length="150" size="50" />
+			max-length="150" size="300" />
 		<div id="email" label="EMAIL" max-length="50" type="email" />
 		<div id="telefonoPersona" label="TELÉFONO PERSONAL" required="true"
 			max-length="8" type="numeric" />
@@ -616,7 +614,7 @@ $.urlParam = function(name) {
 </div>
 
 	<!-- ACCESORIOS -->
-	<table border="1" cellpadding="5" cellspacing="0">
+	<table border="1" cellpadding="5" cellspacing="0" width="620px">
 		<tr>
 			<th>Detalle</th>
 		</tr>
@@ -624,8 +622,8 @@ $.urlParam = function(name) {
 			<td>
 				<table id="detalle-table" border="1" cellpadding="5" cellspacing="0">
 					<tr>
-						<th>ACCESORIO</th>
-						<th>DESCRIPCION DEL ACCESORIO</th>
+						<th width="200px">ACCESORIO</th>
+						<th width="400px">DESCRIPCION DEL ACCESORIO</th>
 						<th><img src="images/add.png" onclick="addAccesorios();"></th>
 					</tr>
 				</table>
@@ -650,7 +648,7 @@ $.urlParam = function(name) {
 	<!-- GUARDAR E IMPRIMIR -->
 	<table width="100%">
 		<tr>
-			<th><button class="CreadOrdenButton" id="CreadOrdenButton" style="width: 200px; height: 50px">Guardar e Imprimir</button></th>
+			<th><button class="CreadOrdenButton" id="CreadOrdenButton" style="width: 250px; height: 80px; font:bold; font-size: 20px;">Guardar e Imprimir</button></th>
 		</tr>
 	</table>
 
@@ -659,23 +657,32 @@ $.urlParam = function(name) {
 	<img id="casopng" alt="" src="images/caso_XXXXXX_logo.png" hidden>
 
 
-<div id="dialog-message" title="Orden Creada"   hidden>
-  <p>
-    <span class="ui-icon ui-icon-circle-check" style="float:left; margin:0 7px 50px 0;"></span>
-    <div id="msg-confirmacion"></div>
-  </p>
- 
-</div>
+	<!-- DIALOGO  -->
+	<div id="dialog-message" title="Orden Creada" hidden>
+		<p>
+			<span class="ui-icon ui-icon-circle-check"
+				style="float: left; margin: 0 7px 50px 0;"></span>
+		<div id="msg-confirmacion"></div>
+		</p>
 
-<div id="dialog-message-pdf" title="Orden Creada"   hidden>
-  <p>
-    <div id="msg-confirmacion"><img src="images/load.gif">Generando PDF</div>
-  </p>
- 
- <div id="dialog-page-load" title="Cargando Pagina"   hidden>
-  <p>
-    <div id="msg-confirmacion"><img src="images/load.gif">Epere favor...</div>
-  </p>
-</div>
+	</div>
+
+	<!-- DIALOGO PDF -->
+	<div id="dialog-message-pdf" title="Orden Creada" hidden>
+		<p>
+		<div id="msg-confirmacion">
+			<img src="images/load.gif">Generando PDF
+		</div>
+		</p>
+	</div>
+
+	<!-- DIALOGO PAGE LOAD -->
+	<div id="dialog-page-load" title="Cargando Pagina" hidden>
+		<p>
+		<div id="msg-confirmacion">
+			<img src="images/load.gif">Epere favor...
+		</div>
+		</p>
+	</div>
 </body>
 </html>
