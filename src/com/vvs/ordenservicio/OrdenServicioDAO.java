@@ -84,7 +84,7 @@ public class OrdenServicioDAO {
 		}
 		map.put("fecha_modificacion", new Date());
 		map.put("usuario_modificacion", os.getUsuario());
-		// map.put("imagen_final", os.getTelefono());
+		map.put("imagen_final", os.getImagen());
 			return map;
 	}
 

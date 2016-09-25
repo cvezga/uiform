@@ -33,8 +33,10 @@ public class MapDAO {
 			int idx=0;
 			for(Entry<String,Object> entry : dataMap.entrySet()){
 				idx++;
-				if("image".equals(entry.getKey())){
-					byte[] bImg64 = ((String)entry.getValue()).getBytes();
+				if("imagen_final".equals(entry.getKey())){
+					String sImg = ((String)entry.getValue()).substring("data:image/png;base64,".length());
+					
+					byte[] bImg64 = sImg.getBytes();
 					byte[] bImg = Base64.getDecoder().decode(bImg64);
 					 
 					ps.setBytes(idx, bImg);

@@ -28,7 +28,7 @@ public class OrdenServicio {
     private String imagenRegistroDanos;
     private long usuario;
     private String[] detalleAccesorios;
-	//private String image;
+	private String imagen;
     
     
 	public int getTelefono() {
@@ -174,6 +174,12 @@ public class OrdenServicio {
 	}
 	public void setOrden(long orden) {
 		this.orden = orden;
+	}
+	public String getImagen() {
+		return imagen;
+	}
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
 	}
 	
     

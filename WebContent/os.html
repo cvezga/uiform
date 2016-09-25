@@ -252,7 +252,7 @@ $.urlParam = function(name) {
 				facturaNota: valueOf('facturaNota'), 
 				fechaFactura: valueOf('fechaFactura'), 
 				detalleAccesorios: getDetalleAccesorios(),
-				image: getImageData(),
+				imagen: getImageData(),
 				usuario: $.urlParam('usuario')
 				
 		};
@@ -474,10 +474,10 @@ $.urlParam = function(name) {
 		}
 		detalles = [];
 		for(r=1; r<=rowCount; r++){
-			row = $('#accesorio-row-'+r);
+			row = $('#tr-accesorio-row-'+r);
 			if(row){
-				sel = $('#accesorio-'+r).prop('value');
-				des = $('#descripcion-accesorio-'+r).prop('value');
+				sel = $('#select-accesorio-'+r).prop('value');
+				des = $('#input-descripcion-accesorio-'+r).prop('value');
 				if( sel && des ){
 					detalles.push(sel);
 					detalles.push(des);
@@ -514,14 +514,16 @@ $.urlParam = function(name) {
 		    
 		    close: function(event, ui){
 		      if(seCreoLaOrden){
+		    	  confirmPdf(ordenId);
 		    	  getPdf(ordenId);
+		    	  
 		      }
 		    }
 		});
 	
 	}
 	
-   function confirm(ordenId){
+   function confirmPdf(ordenId){
         
         $( "#dialog-message-pdf" ).dialog({
               modal: true,
@@ -667,12 +669,12 @@ $.urlParam = function(name) {
 
 <div id="dialog-message-pdf" title="Orden Creada"   hidden>
   <p>
-    <div id="msg-confirmacion"><img src="images/load.gif"> Generando PDF</div>
+    <div id="msg-confirmacion"><img src="images/load.gif">Generando PDF</div>
   </p>
  
  <div id="dialog-page-load" title="Cargando Pagina"   hidden>
   <p>
-    <div id="msg-confirmacion"><img src="images/load.gif"> Epere favor...</div>
+    <div id="msg-confirmacion"><img src="images/load.gif">Epere favor...</div>
   </p>
 </div>
 </body>
