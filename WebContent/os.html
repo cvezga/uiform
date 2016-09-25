@@ -22,6 +22,8 @@ var canvas,ctx;
 var hasValidationError = false;
 var marks = [];
 var seCreoLaOrden = false;
+var searchComboOptions = {};
+
 
 $.urlParam = function(name) {
 	var results = new RegExp('[\?&]' + name + '=([^&#]*)')
@@ -75,6 +77,24 @@ $.urlParam = function(name) {
 			   if(useclass){
 				   xclass=' class="'+useclass.value+'" ';
 			   }
+			   
+			   if(typeof(type) !== "undefined" && type != null && "search-combo" == type.value){
+                   model  =  v.attributes["model"];
+                   if(model){
+                     options = getOptions(model.value, id.value+'-input');
+                   }else{
+                       options = "";
+                   }
+                   onchange  =  v.attributes["on-change"];
+                   
+                   if(onchange){
+                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" onchange=\""+onchange.value+"\">"+options+"</select></div></td></tr>");
+                   }else{
+                       table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><div class=\"ui-widget\"><input onkeyup=\"searchOptions(this,'"+id.value+"-input');\"><select class=\"combobox\" id=\""+id.value+"-input\" >"+options+"</select></div></td></tr>");
+                       
+                   }
+                   onchange="myFunction()";
+               }else
 			   if(typeof(type) !== "undefined" && type != null && "combo" == type.value){
 				   model  =  v.attributes["model"];
 				   if(model){
@@ -174,31 +194,99 @@ $.urlParam = function(name) {
 		$(location).attr('href', 'reporte?orden='+id)
 	}
 	
-	function getOptions(modelName){
+	function getOptions(modelName, target){
 		options = '';
-     
+		
+	 
+		
     	 $.ajaxSetup({ cache: true, async:false });
     	  $.get("os.ms?model="+modelName, function(data, status){
     		  var obj = jQuery.parseJSON( data );
+    		  aoptions = [];
+	   		    memOptionsLoaded = false;
+	   	        
+	   	        memOptions = searchComboOptions[target];
+	   	        if(memOptions){
+	   	            memOptionsLoaded = true;
+	   	        }
+    	    
+    		    
     		  for(i=0; i<obj.length; i=i+2){
     			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
     			  options = options + op;
+    			  if(!memOptionsLoaded){
+    				  aoptions.push(obj[i]);
+    				  aoptions.push(obj[i+1]);
+    			  }
     	      }
+    		  if(!memOptionsLoaded){
+    			  searchComboOptions[target]=aoptions;
+              }
     	    });
      
      return options;
 	}
 	
-	function getSubOptions(modelName, id){
+	function searchOptions(searchFor, target){
+		 aoptions = searchComboOptions[target];
+		 if(aoptions){
+			 matches = '<option value="'+aoptions[0]+'">'+aoptions[1]+'</option>';
+			 nomatches = "";
+			 searchValue = searchFor.value;
+			 firstMatch=true;
+			 for(i=2; i<aoptions.length; i=i+2){
+				 desc = aoptions[i+1];
+				 if(desc.toLowerCase().indexOf(searchValue.toLowerCase())>-1){
+					 if(firstMatch){
+						 isselected = " selected ";
+						 firstMatch = false;
+					 }else{
+						 isselected = "";
+					 }
+					  
+					 matches = matches+'<option value="'+aoptions[i]+'" '+isselected +'>'+aoptions[i+1]+'</option>';	 
+				 }else{
+					 nomatches = nomatches+'<option value="'+aoptions[i]+'" disabled>'+aoptions[i+1]+'</option>';
+				 }
+                 
+                 
+			 }
+			 
+			 options = matches+nomatches;
+			 
+			 $('#'+target).html(options);
+		 }
+		
+	}
+	
+	function getSubOptions(modelName, id, target){
 		options = '';
      
+		
     	 $.ajaxSetup({ cache: true, async:false });
     	  $.get("os.ms?submodel="+modelName+"&id="+id, function(data, status){
     		  var obj = jQuery.parseJSON( data );
+    		  
+    		  
+    		  aoptions = [];
+              memOptionsLoaded = false;
+              
+              memOptions = searchComboOptions[target];
+              if(memOptions){
+                  memOptionsLoaded = true;
+              }
+    		  
     		  for(i=0; i<obj.length; i=i+2){
     			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
     			  options = options + op;
+    			  if(!memOptionsLoaded){
+                      aoptions.push(obj[i]);
+                      aoptions.push(obj[i+1]);
+                  }
     	      }
+    		  if(!memOptionsLoaded){
+                  searchComboOptions[target]=aoptions;
+              }
     	    });
      
      return options;
@@ -342,7 +430,7 @@ $.urlParam = function(name) {
 	   // alert('combo change'+combo+':'+target+':'+model);
 		$('#'+target+'-input').empty();
 		if(combo.value>-1){
-			options = getSubOptions(model, combo.value);
+			options = getSubOptions(model, combo.value, target+'-input');
 			$('#'+target+'-input').append(options);
 		}
 	}
@@ -563,42 +651,28 @@ $.urlParam = function(name) {
 	</table>
 
 	<div id="field-list">
-		<div id="telefono" label="TELÉFONO" required="true" max-length="8"
-			type="numeric" />
-		<div id="fabricante" label="FABRICANTE" required="true" type="combo"
-			model="fabricantes" on-change="comboChange(this,'modelo','modelos')" />
-		<div id="modelo" label="MODELO" required="true" type="combo" size="50" />
-		<div id="serie" label="# SERIE (IMEI)" required="true" min-length="15"
-			max-length="15" type="numeric" />
-		<div id="nombre" label="NOMBRE / APELLIDO" required="true"
-			max-length="150" size="300" />
+		<div id="telefono" label="TELÉFONO" required="true" max-length="8"	type="numeric" />
+		<div id="fabricante" label="FABRICANTE" required="true" type="combo" model="fabricantes" on-change="comboChange(this,'modelo','modelos')" />
+		<div id="modelo" label="MODELO" required="true" type="search-combo" size="50" />
+		<div id="serie" label="# SERIE (IMEI)" required="true" min-length="15"	max-length="15" type="numeric" />
+		<div id="nombre" label="NOMBRE / APELLIDO" required="true"	max-length="150" size="300" />
 		<div id="email" label="EMAIL" max-length="50" type="email" />
-		<div id="telefonoPersona" label="TELÉFONO PERSONAL" required="true"
-			max-length="8" type="numeric" />
-		<div id="direccion" label="DIRECCIÓN" required="true" max-length="300"
-			type="textarea" rows="4" cols="50" />
-		<div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"
-			required="true" type="combo" model="tieneFacturas"
+		<div id="telefonoPersona" label="TELÉFONO PERSONAL" required="true"	max-length="8" type="numeric" />
+		<div id="direccion" label="DIRECCIÓN" required="true" max-length="300"	type="textarea" rows="4" cols="50" />
+		<div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"	required="true" type="combo" model="tieneFacturas"
 			on-change="comboChange(this,'garantia','garantias')"  />
-		<div id="falla1" label="FALLA 1" required="true" type="combo"
-			model="fallas" />
-		<div id="falla2" label="FALLA 2" type="combo" model="fallas" />
-		<div id="falla3" label="FALLA 3" type="combo" model="fallas" />
-		<div id="falla4" label="FALLA 4" type="combo" model="fallas" />
-		<div id="comentario" label="COMENTARIO" required="true"
-			max-length="300" type="textarea" rows="4" cols="50" />
+		<div id="falla1" label="FALLA 1" required="true" type="search-combo" model="fallas" />
+		<div id="falla2" label="FALLA 2" type="search-combo" model="fallas" />
+		<div id="falla3" label="FALLA 3" type="search-combo" model="fallas" />
+		<div id="falla4" label="FALLA 4" type="search-combo" model="fallas" />
+		<div id="comentario" label="COMENTARIO" required="true"	max-length="300" type="textarea" rows="4" cols="50" />
 		<div id="garantia" label="GARANTÍA" required="true" type="combo" />
-		<div id="fabricanteTelefonoPrestado"
-			label="FABRICANTE TELÉFONO PRESTADO" type="combo" model="fabricantes"
+		<div id="fabricanteTelefonoPrestado" label="FABRICANTE TELÉFONO PRESTADO" type="combo" model="fabricantes"
 			on-change="comboChange(this,'modeloTelefonoPrestado','modelos')" />
-		<div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO"
-			type="combo" />
-		<div id="serieTelefonoPrestado"
-			label="# SERIE (IMEI) TELÉFONO PRESTADO" type="numeric"
-			min-length="15" max-length="15" />
+		<div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO" type="search-combo" />
+		<div id="serieTelefonoPrestado"	label="# SERIE (IMEI) TELÉFONO PRESTADO" type="numeric"	min-length="15" max-length="15" />
 		<div id="facturaNota" label="FACTURA / NOTA DE VENTA" max-length="8" />
-		<div id="fechaFactura" label="FECHA DE FACTURA" min-length="10"
-			max-length="10" type="date" use-class="datepicker" />
+		<div id="fechaFactura" label="FECHA DE FACTURA" min-length="10"	max-length="10" type="date" use-class="datepicker" />
 	</div>
 	
 	<!-- ERROR MESSAGE -->
