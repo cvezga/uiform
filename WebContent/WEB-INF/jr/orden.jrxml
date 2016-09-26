@@ -49,7 +49,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	<title>
 		<band height="51">
 			<staticText>
-				<reportElement x="121" y="2" width="314" height="31"/>
+				<reportElement x="121" y="2" width="435" height="31"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Arial" size="24" isBold="true"/>
 				</textElement>
@@ -59,7 +59,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				<reportElement x="0" y="1" width="555" height="1"/>
 			</line>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="121" y="33" width="314" height="18"/>
+				<reportElement stretchType="RelativeToTallestObject" x="121" y="33" width="434" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
@@ -69,10 +69,6 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 			<image>
 				<reportElement x="1" y="2" width="120" height="49"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$F{logo_1}]]></imageExpression>
-			</image>
-			<image>
-				<reportElement x="435" y="2" width="120" height="49"/>
-				<imageExpression class="java.io.InputStream"><![CDATA[$F{logo_2}]]></imageExpression>
 			</image>
 		</band>
 	</title>
