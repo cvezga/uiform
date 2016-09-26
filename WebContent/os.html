@@ -38,7 +38,7 @@ $.urlParam = function(name) {
 
 	$(document).ready(function(e) {
 		
-		dialogPageLoad();
+		//dialogPageLoad();
 		
 		
 		table = $("#table-form");
@@ -187,7 +187,7 @@ $.urlParam = function(name) {
 		      dateFormat: 'dd/mm/yy'
 		    });
 		  
-		  closeDialogPageLoad();
+		 // closeDialogPageLoad();
 	});
 	
 	function getPdf(id){
@@ -639,9 +639,12 @@ $.urlParam = function(name) {
    }
    
    function closeDialogPageLoad(){
-	   $('.ui-dialog-titlebar-close').click();
+	   //$('.ui-dialog-titlebar-close').click();
 	   //$('#dialog-page-load').modal('toggle');
 	   //$('#dialog-page-load').find('.ui-dialog-titlebar-close').click(); //.trigger('click');
+	   //$(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+	   $(".ui-dialog-titlebar-close").hide();
+	   $("#dialog-page-load.dialog").dialog( "close" );
    }
    
 </script>
