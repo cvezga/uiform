@@ -352,7 +352,7 @@ $.urlParam = function(name) {
 		
 		if(!hasValidationError 
 				&& ((form.fabricanteTelefonoPrestado==-1 && (form.modeloTelefonoPrestado>-1 || !isEmpty(form.serieTelefonoPrestado)))
-				||  (form.fabricanteTelefonoPrestado== 1 && (form.modeloTelefonoPrestado==-1 || isEmpty(form.serieTelefonoPrestado)))
+				||  (form.fabricanteTelefonoPrestado> 1 && (form.modeloTelefonoPrestado==-1 || isEmpty(form.serieTelefonoPrestado)))
 						)		){
 			showError("DEBE COMPLETAR EL FABRICANTE, MODELO E IMEI PARA UN TELEFONO PRESTADO");
 		}else
