@@ -357,7 +357,7 @@ $.urlParam = function(name) {
 			showError("DEBE COMPLETAR EL FABRICANTE, MODELO E IMEI PARA UN TELEFONO PRESTADO");
 		}else
 		if(!hasValidationError 
-				&& (form.clienteTieneFactura==-1 && (!isEmpty(form.facturaNota) || !isEpty(form.fechaFactura)))
+				&& (form.clienteTieneFactura==0 && (!isEmpty(form.facturaNota) || !isEpty(form.fechaFactura)))
 				){
 			showError("NUMERO DE FACTURA Y FECHA NO APLICAN PARA ESTE CASO");
 		}else

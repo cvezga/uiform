@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="GB_FAC_FACTURAS_EMITIDAS" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="orden" language="groovy" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.y" value="0"/>
 	<property name="ireport.layers" value="##Mon Oct 03 14:56:48 CST 2011\nlayer.1.name=Layer 1\nlayer.1.visible=true\nlayer.1.id=1\nlayer.0.name=Background\nlayer.0.visible=true\nlayer.0.id=0"/>
 	<parameter name="ORDEN_SERVICIO" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[select os.codigo, os.fecha_ingreso, os.numero_serie_tel, os.numero_serie_tel_prest, os.comentario_ejecutivo, os.telefono, os.nombre_cliente, os.direccion, os.email, os.telefono_personal, os.fecha_entrega, os.imagen_final, os.codigo_tiene_factura, os.factura_nota_venta, os.fecha_factura,
-(select string_agg(a.descripcion,' / ') from log_accesorios a where a.codigo in (select dos.codigo_accesorio from log_deta_orden_servi dos where dos.codigo_orden_servicio = os.codigo)) as accesorios,
+(select archivo_imagen from img_files where id = 1) as logo_1,
+(select archivo_imagen from img_files where id = 2) as logo_2,
+(select string_agg(trim((select descripcion from log_accesorios where codigo = codigo_accesorio)||' - '|| descripcin), chr(10)) from log_deta_orden_servi dos where dos.codigo_orden_servicio = os.codigo) as accesorios,
 (select orig.desc_tienda from log_tiendas orig where orig.codigo = os.codigo_tienda) as tienda_origen,
 (select fa.desc_falla from log_fallas fa where fa.codigo = os.codigo_falla_1) as fallas,
 (select ui.nombre from seg_usuarios ui where ui.cedula = os.usuario_ingreso) as usuario_ingreso,
@@ -34,6 +36,8 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	<field name="codigo_tiene_factura" class="java.math.BigDecimal"/>
 	<field name="factura_nota_venta" class="java.lang.String"/>
 	<field name="fecha_factura" class="java.sql.Timestamp"/>
+	<field name="logo_1" class="java.io.InputStream"/>
+	<field name="logo_2" class="java.io.InputStream"/>
 	<field name="accesorios" class="java.lang.String"/>
 	<field name="tienda_origen" class="java.lang.String"/>
 	<field name="fallas" class="java.lang.String"/>
@@ -45,109 +49,111 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	<title>
 		<band height="51">
 			<staticText>
-				<reportElement x="69" y="2" width="417" height="31"/>
+				<reportElement x="121" y="2" width="314" height="31"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="Arial" size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[ODS (Orden de Servicio)]]></text>
 			</staticText>
-			<image>
-				<reportElement x="0" y="2" width="69" height="49"/>
-			</image>
 			<line>
 				<reportElement x="0" y="1" width="555" height="1"/>
 			</line>
-			<image>
-				<reportElement x="486" y="2" width="69" height="49"/>
-			</image>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="69" y="33" width="417" height="18"/>
+				<reportElement stretchType="RelativeToTallestObject" x="121" y="33" width="314" height="18"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="10" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Sistema de Logística Inversa y Servicio Técnico]]></text>
 			</staticText>
+			<image>
+				<reportElement x="1" y="2" width="120" height="49"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$F{logo_1}]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="435" y="2" width="120" height="49"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$F{logo_2}]]></imageExpression>
+			</image>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="260" splitType="Stretch">
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="1" width="43" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="1" width="45" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Creado:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="62" width="83" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="62" width="86" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Orden Servicio:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="372" y="77" width="60" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="372" y="67" width="64" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Fabricante:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="372" y="92" width="44" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="372" y="82" width="47" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Modelo:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="132" width="70" height="30"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="113" width="76" height="30"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Comentarios:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="181" y="1" width="46" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="181" y="1" width="48" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Usuario:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="356" y="1" width="93" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="356" y="1" width="96" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Fecha de Ingreso:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="32" width="41" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="32" width="44" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Origen:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="183" y="32" width="45" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="183" y="32" width="48" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Destino:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="361" y="32" width="83" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="361" y="32" width="86" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Garantía Inicial:]]></text>
@@ -156,245 +162,245 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				<reportElement x="0" y="31" width="555" height="1"/>
 			</line>
 			<line>
-				<reportElement x="0" y="131" width="555" height="1"/>
+				<reportElement x="0" y="112" width="555" height="1"/>
 			</line>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="170" y="62" width="30" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="170" y="62" width="33" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[IMEI:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="-1" y="116" width="41" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="97" width="44" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Fallas:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="162" width="555" height="1"/>
+				<reportElement x="0" y="143" width="555" height="1"/>
 			</line>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="163" width="104" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="144" width="110" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Telefono de Ingreso:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="178" width="83" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="159" width="88" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Nombre Cliente:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="208" width="55" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="189" width="58" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Dirección:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="223" width="36" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="204" width="39" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Email:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="277" y="193" width="143" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="277" y="174" width="148" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Fecha Estimada de Entrega:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="193" width="96" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="174" width="101" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Teléfono Personal:]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="238" width="555" height="1"/>
+				<reportElement x="0" y="219" width="555" height="1"/>
 			</line>
 			<line>
-				<reportElement x="0" y="259" width="555" height="1"/>
+				<reportElement x="0" y="240" width="555" height="1"/>
 			</line>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="239" width="136" height="20"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="220" width="141" height="20"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Posee el cliente la factura:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="183" y="239" width="101" height="20"/>
+				<reportElement stretchType="RelativeToTallestObject" x="183" y="220" width="107" height="20"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Número de Factura:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="356" y="239" width="93" height="20"/>
+				<reportElement stretchType="RelativeToTallestObject" x="356" y="220" width="97" height="20"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[Fecha de Factura:]]></text>
 			</staticText>
 			<componentElement>
-				<reportElement x="0" y="77" width="137" height="30"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
+				<reportElement x="0" y="77" width="137" height="20"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$F{codigo}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<componentElement>
-				<reportElement x="170" y="77" width="137" height="30"/>
-				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="true" checksumRequired="false">
+				<reportElement x="170" y="77" width="137" height="20"/>
+				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code128" drawText="false" checksumRequired="false">
 					<jr:codeExpression><![CDATA[$F{numero_serie_tel}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="43" y="1" width="138" height="30"/>
+				<reportElement x="45" y="1" width="136" height="30"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tienda_origen}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="227" y="1" width="129" height="30"/>
+				<reportElement x="229" y="1" width="127" height="30"/>
 				<textElement verticalAlignment="Top">
-					<font size="9"/>
+					<font size="9" isBold="false"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario_ingreso}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="449" y="1" width="106" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="452" y="1" width="103" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_ingreso}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="41" y="32" width="142" height="30"/>
+				<reportElement x="44" y="32" width="139" height="30"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tienda_origen}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="228" y="32" width="133" height="30"/>
+				<reportElement x="231" y="32" width="130" height="30"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{tienda_destino}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="444" y="32" width="111" height="15"/>
+				<reportElement x="447" y="32" width="108" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{garantia_inicial}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="70" y="132" width="485" height="30"/>
+				<reportElement x="76" y="113" width="479" height="30"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{comentario_ejecutivo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="432" y="77" width="123" height="15"/>
+				<reportElement x="436" y="67" width="119" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{fabricante}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="416" y="92" width="139" height="15"/>
+				<reportElement x="419" y="82" width="136" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{modelo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="104" y="163" width="173" height="15"/>
+				<reportElement x="110" y="144" width="167" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefono}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="83" y="178" width="472" height="15"/>
+				<reportElement x="88" y="159" width="467" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="96" y="193" width="181" height="15"/>
+				<reportElement x="100" y="174" width="177" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{telefono_personal}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="55" y="208" width="500" height="15"/>
+				<reportElement x="58" y="189" width="497" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{direccion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="36" y="223" width="241" height="15"/>
+				<reportElement x="39" y="204" width="238" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{email}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy h.mm a" isBlankWhenNull="true">
-				<reportElement x="420" y="193" width="135" height="15"/>
+				<reportElement x="425" y="174" width="130" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_entrega}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
-				<reportElement stretchType="RelativeToTallestObject" x="449" y="239" width="106" height="20"/>
+				<reportElement stretchType="RelativeToTallestObject" x="453" y="220" width="103" height="20"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{fecha_factura}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="284" y="239" width="72" height="20"/>
+				<reportElement x="290" y="220" width="66" height="20"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{factura_nota_venta}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="136" y="239" width="47" height="20"/>
+				<reportElement x="141" y="220" width="42" height="20"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[($F{codigo_tiene_factura}.intValue() == 0)?"NO":
 ($F{codigo_tiene_factura}.intValue() == 1)?"SÍ":"N/A"]]></textFieldExpression>
 			</textField>
-			<textField pattern="000000000000000" isBlankWhenNull="true">
+			<textField isBlankWhenNull="true">
 				<reportElement x="83" y="62" width="87" height="15"/>
 				<textElement>
 					<font size="9"/>
@@ -402,33 +408,33 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{codigo}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="40" y="116" width="515" height="15"/>
+				<reportElement x="44" y="97" width="512" height="15"/>
 				<textElement verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{fallas}]]></textFieldExpression>
 			</textField>
-			<textField pattern="000000000000000" isBlankWhenNull="true">
+			<textField pattern="" isBlankWhenNull="true">
 				<reportElement x="201" y="62" width="160" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Number"><![CDATA[$F{numero_serie_tel}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero_serie_tel}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="278" y="163" width="124" height="15"/>
+				<reportElement stretchType="RelativeToTallestObject" x="278" y="144" width="130" height="15"/>
 				<textElement verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[IMEI Telefono Préstamo:]]></text>
 			</staticText>
 			<textField pattern="000000000000000" isBlankWhenNull="true">
-				<reportElement x="402" y="163" width="153" height="15"/>
+				<reportElement x="408" y="144" width="147" height="15"/>
 				<textElement>
 					<font size="9"/>
 				</textElement>
-				<textFieldExpression class="java.lang.Number"><![CDATA[$F{numero_serie_tel_prest}]]></textFieldExpression>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{numero_serie_tel_prest}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -441,28 +447,28 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	<columnFooter>
 		<band height="136">
 			<image>
-				<reportElement x="0" y="20" width="288" height="116"/>
+				<reportElement x="0" y="1" width="288" height="116"/>
 				<imageExpression class="java.io.InputStream"><![CDATA[$F{imagen_final}]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
-				<reportElement x="288" y="20" width="267" height="15"/>
+				<reportElement x="288" y="1" width="267" height="116"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{accesorios}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="288" y="0" width="267" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+				<reportElement stretchType="RelativeToTallestObject" x="288" y="-19" width="267" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
-				<text><![CDATA[Accesorios]]></text>
+				<text><![CDATA[Accesorio / Descripción]]></text>
 			</staticText>
 			<staticText>
-				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="288" height="20"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
-					<font fontName="Arial" size="10" isBold="true"/>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="-19" width="288" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
 					<paragraph rightIndent="5"/>
 				</textElement>
 				<text><![CDATA[GOLPES Y RAYONES VISIBLES]]></text>
@@ -472,7 +478,7 @@ and os.codigo = $P{ORDEN_SERVICIO}]]>
 	<pageFooter>
 		<band height="355">
 			<staticText>
-				<reportElement x="0" y="0" width="555" height="313"/>
+				<reportElement x="0" y="-19" width="555" height="305"/>
 				<textElement textAlignment="Justified">
 					<font size="8"/>
 				</textElement>
@@ -497,26 +503,26 @@ Telefónica no se hace responsable por perdida de información como fotos, músi
 El cliente declara que la información contemplada en la presente orden de servicio es verdadera, que se le ha informado sobre los alcances de la garantía y sobre las causales de anulación de la misma, así como los tiempos de respuesta del taller. ]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="313" width="277" height="27"/>
+				<reportElement x="1" y="286" width="277" height="27"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 				<text><![CDATA[_________________________________________]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1" y="340" width="277" height="15"/>
+				<reportElement x="1" y="313" width="277" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{usuario_ingreso}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="278" y="340" width="277" height="15"/>
+				<reportElement x="278" y="313" width="277" height="15"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="9"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{nombre_cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="278" y="313" width="277" height="27"/>
+				<reportElement x="278" y="286" width="277" height="27"/>
 				<textElement textAlignment="Center" verticalAlignment="Bottom"/>
 				<text><![CDATA[_________________________________________]]></text>
 			</staticText>
