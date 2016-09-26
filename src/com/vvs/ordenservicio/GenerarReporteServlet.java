@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -51,13 +48,15 @@ public class GenerarReporteServlet extends HttpServlet {
 		parametrosReporte.put("ORDEN_SERVICIO", id);
 		Connection connection = DB.getConnection();
 		parametrosReporte.put("REPORT_CONNECTION", connection);
+		
+		/**
 		URI uri= null;
 		try {
 			uri = new URI(request.getRequestURL().toString());
 		} catch (URISyntaxException e1) {
 			e1.printStackTrace();
 		}
-        String proto = "http://";
+	    String proto = "http://";
         String host = uri.getHost();
         String base = "/OrdenServicioView";
         int port = uri.getPort();
@@ -65,6 +64,7 @@ public class GenerarReporteServlet extends HttpServlet {
         parametrosReporte.put("LOGO",rutaLogo);
         parametrosReporte.put("NOMBRE_LOGO","Movistar");
         //parametrosReporte.put("CONTEXTO",request.getServletContext());
+         **/
 	
 		response.setContentType("application/pdf");
 		response.setHeader("Content-disposition","inline; filename='OrdedServicio-"+id+".pdf'");
