@@ -125,7 +125,7 @@ $.urlParam = function(name) {
 		})
 
 		  $("button").click(function(){
-			    
+			    $("#CrearOrdenButton").prop('disabled', true);
 			    $("#errmsg").empty();
 		    	var jsonform = getForm();
 		    	if(!hasValidationError){
@@ -160,6 +160,7 @@ $.urlParam = function(name) {
 			        });
 		    	}
 		    	 
+		    	$("#CrearOrdenButton").prop('disabled', false);
 		    	 
 		    });
 		
@@ -727,7 +728,7 @@ $.urlParam = function(name) {
 	<!-- GUARDAR E IMPRIMIR -->
 	<table width="100%">
 		<tr>
-			<th><button class="CreadOrdenButton" id="CreadOrdenButton" style="width: 250px; height: 80px; font:bold; font-size: 20px;">Guardar e Imprimir</button></th>
+			<th><button class="CrearOrdenButton" id="CrearOrdenButton" style="width: 250px; height: 80px; font:bold; font-size: 20px;">Guardar e Imprimir</button></th>
 		</tr>
 	</table>
 
