@@ -112,7 +112,9 @@ $.urlParam = function(name) {
 				   }
 				   onchange="myFunction()";
 			   }else if(typeof(type) !== "undefined" && type != null && "textarea" == type.value){
-				   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\" ''></textarea></td></tr>");
+				   cols = v.attributes["cols"];
+				   rows = v.attributes["rows"];
+				   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\"  rows=\""+rows.value+"\" cols=\""+cols.value+"\"></textarea></td></tr>");
 				  	   
 			   }else{
 				   if(type && type.value == 'numeric'){
@@ -570,13 +572,11 @@ $.urlParam = function(name) {
 			if(row){
 				sel = $('#select-accesorio-'+r).prop('value');
 				des = $('#input-descripcion-accesorio-'+r).prop('value');
-				if( sel && des ){
+				if(sel==-1 && !isEmpty(des)){
+						showError('Seleccione Accesorio');
+			    }else if( sel>-1 ){
 					detalles.push(sel);
 					detalles.push(des);
-				}else if(sel==-1){
-					showError('Seleccione el accesorio en la linea de detalla No. '+r);
-				}else if(isEmpty(des)){
-					showError('Describa el accesorio seleccionado en la linea de detalle No. '+r);
 				}
 			}
 		}
@@ -667,20 +667,20 @@ $.urlParam = function(name) {
 		<div id="nombre" label="NOMBRE / APELLIDO" required="true"	max-length="150" size="300" />
 		<div id="email" label="EMAIL" max-length="50" type="email" />
 		<div id="telefonoPersona" label="TELÉFONO PERSONAL" required="true"	max-length="8" type="numeric" />
-		<div id="direccion" label="DIRECCIÓN" required="true" max-length="300"	type="textarea" rows="4" cols="50" />
+		<div id="direccion" label="DIRECCIÓN" required="true" max-length="300"	type="textarea" rows="3" cols="50" />
 		<div id="clienteTieneFactura" label="CLIENTE TIENE FACTURA"	required="true" type="combo" model="tieneFacturas"
 			on-change="comboChange(this,'garantia','garantias')"  />
 		<div id="falla1" label="FALLA 1" required="true" type="search-combo" model="fallas" />
 		<div id="falla2" label="FALLA 2" type="search-combo" model="fallas" />
 		<div id="falla3" label="FALLA 3" type="search-combo" model="fallas" />
 		<div id="falla4" label="FALLA 4" type="search-combo" model="fallas" />
-		<div id="comentario" label="COMENTARIO" required="true"	max-length="300" type="textarea" rows="4" cols="50" />
+		<div id="comentario" label="COMENTARIO" required="true"	max-length="300" type="textarea" rows="3" cols="50" />
 		<div id="garantia" label="GARANTÍA" required="true" type="combo" />
 		<div id="fabricanteTelefonoPrestado" label="FABRICANTE TELÉFONO PRESTADO" type="combo" model="fabricantes"
 			on-change="comboChange(this,'modeloTelefonoPrestado','modelos')" />
 		<div id="modeloTelefonoPrestado" label="MODELO TELÉFONO PRESTADO" type="search-combo" />
 		<div id="serieTelefonoPrestado"	label="# SERIE (IMEI) TELÉFONO PRESTADO" type="numeric"	min-length="15" max-length="15" />
-		<div id="facturaNota" label="FACTURA / NOTA DE VENTA" max-length="8" />
+		<div id="facturaNota" label="FACTURA / NOTA DE VENTA" max-length="20" />
 		<div id="fechaFactura" label="FECHA DE FACTURA" min-length="10"	max-length="10" type="date" use-class="datepicker" />
 	</div>
 	
