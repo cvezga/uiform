@@ -1,5 +1,6 @@
 package com.cvezga.uiform;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -48,7 +49,11 @@ public class MicroServiceServlet extends HttpServlet {
 		//CacheManager manager = CacheManager.newInstance(ecfile);
 		//cache = manager.getCache("OrdenServicio");
 		 
+        String propFile = getServletContext().getRealPath("WEB-INF/application.properties");
         
+        Config.load(new File(propFile));
+        
+        CACHE_TIME = Config.getInt("cache.browser.minutes") * 60 * 1000;
         
       
     }
