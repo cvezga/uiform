@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 	<display-name>OrdenServicioView</display-name>
+	
+	<filter>
+		<description>
+		</description>
+		<display-name>ReplaceContentFilter</display-name>
+		<filter-name>ReplaceContentFilter</filter-name>
+		<filter-class>com.cvezga.uiform.web.filter.ReplaceContentFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>ReplaceContentFilter</filter-name>
+		<url-pattern>/os.html</url-pattern>
+	</filter-mapping>
+	
 	<servlet>
 		<description>
 		</description>
 		<display-name>MicroServiceServlet</display-name>
 		<servlet-name>MicroServiceServlet</servlet-name>
-		<servlet-class>com.cvezga.uiform.MicroServiceServlet</servlet-class>
+		<servlet-class>com.cvezga.uiform.web.servlet.MicroServiceServlet</servlet-class>
 		<init-param>
 		  <description></description>
 		  <param-name>os.ms</param-name>
