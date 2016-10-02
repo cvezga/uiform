@@ -38,9 +38,9 @@ public class ReplaceContentFilter implements Filter {
       if (text != null) {
         text = text.replace("{os_combo_ajax_control_timestamp}", String.valueOf(System.currentTimeMillis()));
         response.setContentLength(text.getBytes().length);
-        response.getWriter().write(text);
-        response.getWriter().flush();
-      
+        byte[] utf8JsonString = text.getBytes("Windows-1252");
+		response.getOutputStream().write(utf8JsonString);
+        response.getOutputStream().flush();      
       }
     }
   }

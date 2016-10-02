@@ -2,6 +2,7 @@ package com.cvezga.uiform.web.filter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.WriteListener;
@@ -35,6 +36,11 @@ public class MyServletOutputStream extends ServletOutputStream {
 	
 	@Override
 	public String toString() {
+		try {
+			return new String(this.baos.toByteArray(),"Windows-1252");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		return new String(this.baos.toByteArray());
 	}
 	
