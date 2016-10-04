@@ -97,7 +97,7 @@ $.urlParam = function(name) {
 			   }else if(typeof(type) !== "undefined" && type != null && "textarea" == type.value){
 				   cols = v.attributes["cols"];
 				   rows = v.attributes["rows"];
-				   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\"  rows=\""+rows.value+"\" cols=\""+cols.value+"\"></textarea></td></tr>");
+				   table.append("<tr class='rich-table'><td class=\"rich-table-cell tablaTitulo\">"+label.value+reqchar+":</td><td  class=\"odd\"><textarea id=\""+id.value+"-input\"  rows=\""+rows.value+"\" cols=\""+cols.value+"\" "+xmaxlength+"></textarea></td></tr>");
 				  	   
 			   }else{
 				   if(type && type.value == 'numeric'){
