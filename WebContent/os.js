@@ -1,6 +1,7 @@
 ////////////////////////////
-// Ordeb De Servicio Logic
+// Orden de Servicio Logic
 ////////////////////////////
+
 var canvas,ctx;
 var hasValidationError = false;
 var marks = [];
@@ -19,10 +20,26 @@ $.urlParam = function(name) {
 }
 
 
+/////////////////////////////////////////////////////////////////////////////////////////////
+//
+
 	$(document).ready(function(e) {
 		
 		//dialogPageLoad();
+
+		genForm();
 		
+		init();
+	
+	});
+	
+//
+/////////////////////////////////////////////////////////////////////////////////////////////
+	
+///////////////////////
+// UIFORM
+///////////////////////	
+	function genForm(){
 		
 		table = $("#table-form");
 		fields =  $("#field-list");
@@ -108,7 +125,12 @@ $.urlParam = function(name) {
 			   }
 		   });
 		})
-
+	}
+	
+////////////////////
+// INIT
+////////////////////
+	function init(){
 		  $("button").click(function(){
 			    $("#CrearOrdenButton").prop('disabled', true);
 			    $("#errmsg").empty();
@@ -130,14 +152,14 @@ $.urlParam = function(name) {
 			        		idx1 = data.indexOf(',');
 			        		newId = data.substring(idx1+1);
 			        		//uploadImage(newId);
- 				            //alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
+				            //alert("SE CREO LA ORDEN DE SERVICIO NO.: " + newId);
 			        		if(data.startsWith("success") && "success" == status){
 			        		       //getPdf(newId);
-                                //location.reload();
-                                seCreoLaOrden=true;
+                              //location.reload();
+                              seCreoLaOrden=true;
 		                    }     
- 				            
- 				           confirm(newId);
+				            
+				           confirm(newId);
 			        		
 			        	}
 			        	
@@ -173,131 +195,11 @@ $.urlParam = function(name) {
 		    });
 		  
 		 // closeDialogPageLoad();
-	});
-	
-	function getPdf(id){
-		//window.location.href = "reporte?orden="+id;
-		$(location).attr('href', 'reporte?orden='+id)
 	}
 	
-	function getOptions(modelName, target){
-		options = '';
-		
-	 
-		
-    	 $.ajaxSetup({ cache: true, async:false });
-    	  $.get("os.ms?model="+modelName+"&cc="+os_combo_ajax_control_timestamp, function(data, status){
-    		  var obj = jQuery.parseJSON( data );
-    		  aoptions = [];
-	   		    memOptionsLoaded = false;
-	   	        
-	   	        memOptions = searchComboOptions[target];
-	   	        if(memOptions){
-	   	            memOptionsLoaded = true;
-	   	        }
-    	    
-    		    
-    		  for(i=0; i<obj.length; i=i+2){
-    			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
-    			  options = options + op;
-    			  if(!memOptionsLoaded){
-    				  aoptions.push(obj[i]);
-    				  aoptions.push(obj[i+1]);
-    			  }
-    	      }
-    		  if(!memOptionsLoaded){
-    			  searchComboOptions[target]=aoptions;
-              }
-    	    });
-     
-     return options;
-	}
-	
-	function searchOptions(searchFor, target){
-		 aoptions = searchComboOptions[target];
-		 if(aoptions){
-			 matches = '<option value="'+aoptions[0]+'">'+aoptions[1]+'</option>';
-			 nomatches = "";
-			 searchValue = searchFor.value;
-			 firstMatch=true;
-			 for(i=2; i<aoptions.length; i=i+2){
-				 desc = aoptions[i+1];
-				 if(desc.toLowerCase().indexOf(searchValue.toLowerCase())>-1){
-					 if(firstMatch){
-						 isselected = " selected ";
-						 firstMatch = false;
-					 }else{
-						 isselected = "";
-					 }
-					  
-					 matches = matches+'<option value="'+aoptions[i]+'" '+isselected +'>'+aoptions[i+1]+'</option>';	 
-				 }else{
-					 nomatches = nomatches+'<option value="'+aoptions[i]+'" disabled>'+aoptions[i+1]+'</option>';
-				 }
-                 
-                 
-			 }
-			 
-			 options = matches+nomatches;
-			 
-			 $('#'+target).html(options);
-		 }
-		
-	}
-	
-	function getSubOptions(modelName, id, target){
-		options = '';
-     
-		
-    	 $.ajaxSetup({ cache: true, async:false });
-    	  $.get("os.ms?submodel="+modelName+"&id="+id+"&cc="+os_combo_ajax_control_timestamp, function(data, status){
-    		  var obj = jQuery.parseJSON( data );
-    		  
-    		  
-    		  aoptions = [];
-              memOptionsLoaded = false;
-              
-              memOptions = searchComboOptions[target];
-              if(memOptions){
-                  memOptionsLoaded = true;
-              }
-    		  
-    		  for(i=0; i<obj.length; i=i+2){
-    			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
-    			  options = options + op;
-    			  if(!memOptionsLoaded){
-                      aoptions.push(obj[i]);
-                      aoptions.push(obj[i+1]);
-                  }
-    	      }
-    		  if(!memOptionsLoaded){
-                  searchComboOptions[target]=aoptions;
-              }
-    	    });
-     
-     return options;
-	}
-	
-	function updateFormEntries(){
-		for(i=1; i<23; i++){
-			row = document.getElementById('field-'+i);//$("#field1");
-			id = row.getAttribute('id');
-			label = row.getAttribute('label');
-			required = row.getAttribute('required');
-			if(required!=null){
-				req="*";
-			}else{
-				req="";
-			}
-			
-			//row.innerHTML = "<tr><td>"+label+"</td><td><input></td></tr>";
-			
-			table = document.getElementById('table-form');
-			
-			table.innerHTML = table.innerHTML + "<tr><td>"+label+req+":</td><td><input id=\""+id+"-input\" ></td></tr>";
-		}
-	}
-	
+///////////////////////
+// FORM 
+///////////////////////
 	
 	function getForm(){
 		hasValidationError = false;
@@ -412,84 +314,11 @@ $.urlParam = function(name) {
 		return value;
 	}
 	
-	function comboChange(combo, target, model){
-	   // alert('combo change'+combo+':'+target+':'+model);
-	   searchComboOptions[target+'-input']=null;
-		$('#'+target+'-input').empty();
-		searchText = $('#'+target+'-search-text');
-		if(searchText){
-			searchText.val('');
-		}
-		if(combo.value>-1){
-			options = getSubOptions(model, combo.value, target+'-input');
-			$('#'+target+'-input').append(options);
-		}
-	}
+
+////////////////////////////////
+// DETALLE ACCESORIOS
+////////////////////////////////
 	
-	function paintImage(){
-		  canvas=document.getElementById("myCanvas");
-		     ctx=canvas.getContext("2d");
-		    var img=document.getElementById("casopng");
-		    ctx.drawImage(img,0,0);
-		 
-	}
-	
-	function Draw(x, y) {
-	   
-		if(!removeMark(x,y)){
-		
-			 drawRect(x,y);
-        
-        	 marks.push([x,y]);
-        
-		}
-	  
-	}
-	
-	function drawRect(x,y){
-		    ctx.beginPath();
-	        ctx.strokeStyle = 'red';
-	        ctx.lineWidth = 2;
-	        ctx.lineJoin = "round";
-	        ctx.rect(x, y, 10, 10);
-	        ctx.closePath();
-	        ctx.stroke();
-	}
-	
-	function removeMark(x,y){
-	    removed = false;
-		
-	    for(i=(marks.length-1); i>=0; i--){
-			xx = marks[i][0];
-			yy = marks[i][1];
-			if( ( x >= xx-5 && x <= xx+10-5 ) && ( y >= yy-5 && y <= yy+10-5 ) ){
-				marks.splice(i,1);
-				redraw();
-				removed = true;
-				break;
-			}
-		}
-		
-		return removed;
-		
-	}
-	
-	function redraw(){
-		paintImage();
-		for(i=0; i<marks.length; i++){
-			xx = marks[i][0];
-			yy = marks[i][1];
-		 
-			drawRect(xx,yy);
-		}
-		
-	}
-	
-	function getImageData(){
-	  canvasServer = document.getElementById("myCanvas");
-	  imageDataURL = canvasServer.toDataURL('image/png');
-	  return imageDataURL;
-	}
 	
 	var rowCount=0;
 	function addAccesorios(){
@@ -553,58 +382,288 @@ $.urlParam = function(name) {
         return false;
 	}
 	
-	function confirm(ordenId){
-		
-		$('#msg-confirmacion').html("Se creo la Orden de Servicio No. "+ordenId);
-		$( "#dialog-message" ).dialog({
-		      modal: true,
-		      buttons: {
-		        Ok: function() {
-		          $( this ).dialog( "close" );
-		        }
-		      }
-		     ,
-		    
-		    close: function(event, ui){
-		      if(seCreoLaOrden){
-		    	  confirmPdf(ordenId);
-		    	  getPdf(ordenId);
-		    	  
-		      }
-		    }
-		});
 	
+  
+   
+////////////////////////////////////////////////////////////////
+// C O M B O S
+////////////////////////////////////////////////////////////////
+   
+	function comboChange(combo, target, model){
+		   // alert('combo change'+combo+':'+target+':'+model);
+		   searchComboOptions[target+'-input']=null;
+			$('#'+target+'-input').empty();
+			searchText = $('#'+target+'-search-text');
+			if(searchText){
+				searchText.val('');
+			}
+			if(combo.value>-1){
+				options = getSubOptions(model, combo.value, target+'-input');
+				$('#'+target+'-input').append(options);
+			}
+		}
+	
+	function getSubOptions(modelName, id, target){
+		options = '';
+     
+		
+    	 $.ajaxSetup({ cache: true, async:false });
+    	  $.get("os.ms?submodel="+modelName+"&id="+id+"&cc="+os_combo_ajax_control_timestamp, function(data, status){
+    		  var obj = jQuery.parseJSON( data );
+    		  
+    		  
+    		  aoptions = [];
+              memOptionsLoaded = false;
+              
+              memOptions = searchComboOptions[target];
+              if(memOptions){
+                  memOptionsLoaded = true;
+              }
+    		  
+    		  for(i=0; i<obj.length; i=i+2){
+    			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
+    			  options = options + op;
+    			  if(!memOptionsLoaded){
+                      aoptions.push(obj[i]);
+                      aoptions.push(obj[i+1]);
+                  }
+    	      }
+    		  if(!memOptionsLoaded){
+                  searchComboOptions[target]=aoptions;
+              }
+    	    });
+     
+     return options;
 	}
 	
-   function confirmPdf(ordenId){
-        
-        $( "#dialog-message-pdf" ).dialog({
-              modal: true,
-              buttons: {
-                Ok: function() {
-                  $( this ).dialog( "close" );
-                }
+	function searchOptions(searchFor, target){
+		 aoptions = searchComboOptions[target];
+		 if(aoptions){
+			 matches = '<option value="'+aoptions[0]+'">'+aoptions[1]+'</option>';
+			 nomatches = "";
+			 searchValue = searchFor.value;
+			 firstMatch=true;
+			 for(i=2; i<aoptions.length; i=i+2){
+				 desc = aoptions[i+1];
+				 if(desc.toLowerCase().indexOf(searchValue.toLowerCase())>-1){
+					 if(firstMatch){
+						 isselected = " selected ";
+						 firstMatch = false;
+					 }else{
+						 isselected = "";
+					 }
+					  
+					 matches = matches+'<option value="'+aoptions[i]+'" '+isselected +'>'+aoptions[i+1]+'</option>';	 
+				 }else{
+					 nomatches = nomatches+'<option value="'+aoptions[i]+'" disabled>'+aoptions[i+1]+'</option>';
+				 }
+                
+                
+			 }
+			 
+			 options = matches+nomatches;
+			 
+			 $('#'+target).html(options);
+		 }
+		
+	}
+	
+	function getOptions(modelName, target){
+		options = '';
+		
+	 
+		
+    	 $.ajaxSetup({ cache: true, async:false });
+    	  $.get("os.ms?model="+modelName+"&cc="+os_combo_ajax_control_timestamp, function(data, status){
+    		  var obj = jQuery.parseJSON( data );
+    		  aoptions = [];
+	   		    memOptionsLoaded = false;
+	   	        
+	   	        memOptions = searchComboOptions[target];
+	   	        if(memOptions){
+	   	            memOptionsLoaded = true;
+	   	        }
+    	    
+    		    
+    		  for(i=0; i<obj.length; i=i+2){
+    			  op = '<option value="'+obj[i]+'">'+obj[i+1]+'</option>';
+    			  options = options + op;
+    			  if(!memOptionsLoaded){
+    				  aoptions.push(obj[i]);
+    				  aoptions.push(obj[i+1]);
+    			  }
+    	      }
+    		  if(!memOptionsLoaded){
+    			  searchComboOptions[target]=aoptions;
               }
-        });
-    
-    }
+    	    });
+     
+     return options;
+	}
+	
+////////////////////////////////////////////////////////////////
+// C A N V A S
+////////////////////////////////////////////////////////////////   
    
-   function dialogPageLoad(){
-       
-       $( "#dialog-page-load").dialog(
-    		 {
-             modal: true
-             }
-       );
+   function getImageData(){
+	  canvasServer = document.getElementById("myCanvas");
+	  imageDataURL = canvasServer.toDataURL('image/png');
+	  return imageDataURL;
+	}
    
-   }
-   
-   function closeDialogPageLoad(){
-	   //$('.ui-dialog-titlebar-close').click();
-	   //$('#dialog-page-load').modal('toggle');
-	   //$('#dialog-page-load').find('.ui-dialog-titlebar-close').click(); //.trigger('click');
-	   //$(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
-	   $(".ui-dialog-titlebar-close").hide();
-	   $("#dialog-page-load.dialog").dialog( "close" );
-   }
-  
+   function removeMark(x,y){
+	    removed = false;
+		
+	    for(i=(marks.length-1); i>=0; i--){
+			xx = marks[i][0];
+			yy = marks[i][1];
+			if( ( x >= xx-5 && x <= xx+10-5 ) && ( y >= yy-5 && y <= yy+10-5 ) ){
+				marks.splice(i,1);
+				redraw();
+				removed = true;
+				break;
+			}
+		}
+		
+		return removed;
+		
+	}
+	
+	function redraw(){
+		paintImage();
+		for(i=0; i<marks.length; i++){
+			xx = marks[i][0];
+			yy = marks[i][1];
+		 
+			drawRect(xx,yy);
+		}
+		
+	}
+	
+	function paintImage(){
+		  canvas=document.getElementById("myCanvas");
+		     ctx=canvas.getContext("2d");
+		    var img=document.getElementById("casopng");
+		    ctx.drawImage(img,0,0);
+		 
+	}
+	
+	function Draw(x, y) {
+	   
+		if(!removeMark(x,y)){
+		
+			 drawRect(x,y);
+      
+      	 marks.push([x,y]);
+      
+		}
+	  
+	}
+	
+	function drawRect(x,y){
+		    ctx.beginPath();
+	        ctx.strokeStyle = 'red';
+	        ctx.lineWidth = 2;
+	        ctx.lineJoin = "round";
+	        ctx.rect(x, y, 10, 10);
+	        ctx.closePath();
+	        ctx.stroke();
+	}
+	
+	
+////////////////////
+// REPORTE
+////////////////////
+	
+	function getPdf(id){
+		//window.location.href = "reporte?orden="+id;
+		$(location).attr('href', 'reporte?orden='+id)
+	}
+	
+	
+	
+////////////////////////
+// UTILS
+////////////////////////
+	
+	 function dialogPageLoad(){
+	       
+	       $( "#dialog-page-load").dialog(
+	    		 {
+	             modal: true
+	             }
+	       );
+	   
+	   }
+	   
+	   function closeDialogPageLoad(){
+		   //$('.ui-dialog-titlebar-close').click();
+		   //$('#dialog-page-load').modal('toggle');
+		   //$('#dialog-page-load').find('.ui-dialog-titlebar-close').click(); //.trigger('click');
+		   //$(".ui-dialog-titlebar-close", ui.dialog | ui).hide();
+		   $(".ui-dialog-titlebar-close").hide();
+		   $("#dialog-page-load.dialog").dialog( "close" );
+	   }
+
+	   function confirm(ordenId){
+			
+			$('#msg-confirmacion').html("Se creo la Orden de Servicio No. "+ordenId);
+			$( "#dialog-message" ).dialog({
+			      modal: true,
+			      buttons: {
+			        Ok: function() {
+			          $( this ).dialog( "close" );
+			        }
+			      }
+			     ,
+			    
+			    close: function(event, ui){
+			      if(seCreoLaOrden){
+			    	  confirmPdf(ordenId);
+			    	  getPdf(ordenId);
+			    	  
+			      }
+			    }
+			});
+		
+		}
+		
+	   function confirmPdf(ordenId){
+	        
+	        $( "#dialog-message-pdf" ).dialog({
+	              modal: true,
+	              buttons: {
+	                Ok: function() {
+	                  $( this ).dialog( "close" );
+	                }
+	              }
+	        });
+	    
+	    }
+	   
+		
+		
+
+		/**
+		function updateFormEntries(){
+			for(i=1; i<23; i++){
+				row = document.getElementById('field-'+i);//$("#field1");
+				id = row.getAttribute('id');
+				label = row.getAttribute('label');
+				required = row.getAttribute('required');
+				if(required!=null){
+					req="*";
+				}else{
+					req="";
+				}
+				
+				//row.innerHTML = "<tr><td>"+label+"</td><td><input></td></tr>";
+				
+				table = document.getElementById('table-form');
+				
+				table.innerHTML = table.innerHTML + "<tr><td>"+label+req+":</td><td><input id=\""+id+"-input\" ></td></tr>";
+			}
+		}**/
+		
+
+	   
